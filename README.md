@@ -11,7 +11,7 @@ erweitert für die deutsche Sprache.
 
 | Datei | Zweck |
 |---|---|
-| `SKILL.md` | Der eigentliche Skill: 34 Muster in 7 Kategorien, Prozess, Beispiel |
+| `SKILL.md` | Der eigentliche Skill: 40 Muster in 7 Kategorien, Prozess, Beispiel |
 | `scripts/analyse.py` | Stilometrie-Scanner: Satzlängen-CV, Füllwörter, Trikolon, Typografie |
 | `references/wordlist.json` | Deutsche KI-Vokabular- und Floskel-Listen (9 Kategorien) |
 

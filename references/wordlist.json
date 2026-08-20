@@ -52,5 +52,19 @@
   "kopula_vermeidung": [
     "dient als", "fungiert als", "stellt dar", "bildet ab",
     "zeichnet sich aus", "gilt als", "erweist sich als"
+  ],
+  "pfadfinder_ansagen": [
+    "Tauchen wir ein", "Lassen Sie uns eintauchen",
+    "Schauen wir uns das genauer an", "Hier ist, was Sie wissen müssen",
+    "Hier ist, was du wissen musst", "Ohne Umschweife"
+  ],
+  "zuschpruch_kicker": [
+    "Und das ist okay", "Und das ist völlig in Ordnung",
+    "Da ist nichts falsch dran", "Du bist nicht allein",
+    "Das ist völlig normal"
+  ],
+  "autoritaets_tropen": [
+    "Die eigentliche Frage ist", "Im Kern geht es um",
+    "Im Grunde genommen", "tiefgreifend", "das Herz der Sache"
   ]
 }

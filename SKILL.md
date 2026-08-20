@@ -1,6 +1,6 @@
 ---
 name: humanizer-de
-version: 0.1.0
+version: 0.2.0
 description: Deutsche Texte menschlich klingen lassen: erkennt und entfernt KI-typische Muster, stilometrische Auffälligkeiten und Typografie-Fallen.
 license: MIT
 compatible-environments: [claude-code, claude-code-action, opencode, hermes]
@@ -36,7 +36,7 @@ Der Text kommt inline, als Datei (mit read_file laden) oder mit einer Schreibpro
 
 ## MUSTERKATALOG
 
-34 Muster in sieben Kategorien (A bis G). Nummerierung angelehnt an das englische Original (blader/humanizer), Beispiele komplett auf Deutsch und praxisnah.
+40 Muster in sieben Kategorien (A bis G). Nummerierung angelehnt an das englische Original (blader/humanizer), Beispiele komplett auf Deutsch und praxisnah.
 
 ### A. Inhaltsmuster
 
@@ -94,6 +94,14 @@ Der Text kommt inline, als Datei (mit read_file laden) oder mit einer Schreibpro
 > Vorher: Eine Konfigurationsdatei wird nicht benötigt. Die Ergebnisse werden automatisch gespeichert.
 > Nachher: Du brauchst keine Konfigurationsdatei. Das Tool speichert die Ergebnisse selbst.
 
+**B8. Ausgeschriebene Abkürzungen.** KI schreibt „zum Beispiel", „unter anderem", „beziehungsweise", „das heißt" aus, wo erfahrene Schreiber z. B., u. a., bzw., d. h. setzen (korrektur.de). Umgekehrt gilt: Wer nie abkürzt, wirkt wie ein Modell. Abkürzen, wo es im Kontext üblich ist — aber nicht mechanisch überall.
+> Vorher: Das gilt zum Beispiel für Konfigurationen, aber auch für Tests, insbesondere bei Integrationstests, das heißt bei mehreren Komponenten.
+> Nachher: Das gilt z. B. für Konfigurationen und Tests, insbesondere Integrationstests mit mehreren Komponenten.
+
+**B9. Autoritäts-Tropen.** „Die eigentliche Frage ist …", „Im Kern geht es um …", „Im Grunde genommen …", „tiefgreifend". Feierlicher Anschein von Tiefe, der danach nur Gewöhnliches wiederholt.
+> Vorher: Die eigentliche Frage ist, ob Teams mitziehen. Im Kern geht es um Bereitschaft zur Veränderung.
+> Nachher: Die Frage ist, ob die Teams mitziehen. Das hängt davon ab, ob sie ihre Gewohnheiten ändern wollen.
+
 ### C. Struktur und Rhythmus
 
 **C1. Konnektoren-Inflation.** „darüber hinaus", „außerdem", „zusätzlich", „ferner", „des Weiteren", „nicht zuletzt". In akademischen Texten üblich, in KI-Texten mechanisch übermäßig. Der wichtigste Satzverbinder des Deutschen ist das vorangestellte Verb.
@@ -115,6 +123,10 @@ Der Text kommt inline, als Datei (mit read_file laden) oder mit einer Schreibpro
 **C5. Fragmentierte Absätze.** Jeder Abschnitt behandelt exakt ein Thema, beginnt und endet sauber, aber ohne Übergänge. Der Lesefluss wirkt fragmentiert, Verknüpfungen fehlen.
 > Vorher: [Drei Absätze, je in sich geschlossen, ohne Verweis aufeinander]
 > Nachher: [Absätze, die aufeinander Bezug nehmen: „Anders als beim Ansatz aus dem vorigen Abschnitt …"]
+
+**C6. Zweiteilige Schablonen-Überschriften.** „Anforderungen und Herausforderungen", „Funktionsweise und Anwendung", „Geschichte und Bedeutung". KI erzeugt gehäuft zweiteilige Überschriften, die ein Thema paarig ordnen, wo menschliche Gliederung eher beim konkreten Inhalt bleibt (Wikipedia DE).
+> Vorher: ## Funktionsweise und Anwendung
+> Nachher: ## Wie der Import läuft
 
 ### D. Typografie und Formatierung
 
@@ -164,6 +176,14 @@ Der Text kommt inline, als Datei (mit read_file laden) oder mit einer Schreibpro
 > Vorher: Die Fachkraft prüft die Daten, die Person entscheidet, das Individuum verantwortet.
 > Nachher: Sie prüft die Daten, entscheidet und verantwortet das Ergebnis.
 
+**E5. Pfadfinder-Ansagen.** „Tauchen wir ein …", „Schauen wir uns das genauer an …", „Hier ist, was Sie wissen müssen". Die Ankündigung ersetzt das Tun und verleiht Tutorial-Luft.
+> Vorher: Tauchen wir ein in die Welt der Container-Netzwerke. Hier ist, was Sie wissen müssen.
+> Nachher: Container-Netzwerke haben drei Ebenen: Bridge, Overlay und Macvlan. Die unterscheiden sich so.
+
+**E6. Zuspruch-Kicker.** „Und das ist okay.", „Da ist nichts falsch dran.", „Du bist nicht allein damit." Ungefragte Beruhigung am Absatzende, als müsste der Leser getröstet werden.
+> Vorher: Vielleicht haben Sie noch keine Testumgebung. Und das ist okay. Da ist nichts falsch dran.
+> Nachher: Viele Teams starten ohne Testumgebung und bauen eine, wenn die ersten Regressionen Zeit kosten.
+
 ### F. Seele und Haltung
 
 **F1. Meinungslosigkeit.** Nur neutrales Berichten, keine Position. Menschen haben einen Standpunkt und reagieren auf Fakten.
@@ -184,6 +204,8 @@ Der Text kommt inline, als Datei (mit read_file laden) oder mit einer Schreibpro
 ### G. Tödliche Kombination
 
 **G1. Tödliche Kombination.** Kein einzelnes Muster macht einen Text KI-verdächtig. Zwei oder drei Muster zusammen (etwa Gedankenstrich-Masse + Dreier-Adjektive + „nicht nur …, sondern auch") und der Text ist als KI identifiziert. Der Scan zählt Muster-Dichte, nicht einzelne Treffer.
+
+**G2. Register-Konsistenz.** Kein Muster wirkt isoliert — der Kontext entscheidet, was auffällt. Ein Bewerbungsschreiben verträgt andere Konnektoren als ein Chat-Posting. Wer alle Muster mechanisch herausstreicht, produziert stimmlosen Durchschnitt statt natürliche Sprache. Der Katalog beschreibt Tells, keine Verbote: Ein Gedankenstrich bleibt erlaubt, „außerdem" bleibt erlaubt — Häufung und Monotonie sind das Problem. Bei jedem Streichen prüfen: Passt die Alternative zum Register des Textes und zur Stimme des Autors (falls Schreibprobe vorliegt)?
 
 ## STIL-KALIBRIERUNG (optional)
 
