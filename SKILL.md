@@ -1,10 +1,14 @@
 ---
 name: humanizer-de
-version: 0.2.0
-description: Deutsche Texte menschlich klingen lassen: erkennt und entfernt KI-typische Muster, stilometrische Auffälligkeiten und Typografie-Fallen.
+description: "Deutsche Texte menschlich machen: erkennt und entfernt KI-typische Muster (40er-Katalog), stilometrische Auffälligkeiten und deutsche Typografie-Fallen. Laden bei: humanisieren, ent-KI-en, ChatGPT-Spuren entfernen, KI-Tells prüfen, Stil-Anpassung mit Schreibprobe."
+version: 0.2.1
+author: nakielski
 license: MIT
-compatible-environments: [claude-code, claude-code-action, opencode, hermes]
-keywords: [humanisieren, menschelei, ki-texte, de-ai, deutsche-texte, prose, editing]
+platforms: [linux, macos, windows]
+metadata:
+  hermes:
+    tags: [writing, editing, humanize, german, anti-ai-slop, prose, text]
+    related_skills: [creative/humanizer]
 ---
 
 # Humanizer DE
