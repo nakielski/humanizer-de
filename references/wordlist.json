@@ -1,0 +1,56 @@
+{
+  "ki_vokabular": [
+    "essenziell", "vielfältig", "nahtlos", "maßgeschneidert", "umfassend",
+    "ganzheitlich", "eintauchen", "präzise", "strukturell", "robust",
+    "Landschaft", "nahtlos integriert", "revolutionär", "optimieren",
+    "auf das nächste Level", "Paradigmenwechsel", "transformativ",
+    "bahnbrechend", "innovativ", "cutting-edge", "zustandsbehaftet"
+  ],
+  "bedeutungs_aufblaehung": [
+    "Zeugnis für", "steht als", "dient als", "spielt eine wichtige Rolle",
+    "spielt eine entscheidende Rolle", "unterstreicht die Bedeutung",
+    "Wendepunkt", "Schlüsselmoment", "tief verwurzelt",
+    "bleibenden Eindruck", "fasziniert weiterhin", "festigt",
+    "reiches kulturelles Erbe", "reiche Geschichte", "atemberaubend",
+    "bleibendes Vermächtnis", "im Herzen von", "eingebettet in"
+  ],
+  "konnektoren_inflation": [
+    "darüber hinaus", "außerdem", "zusätzlich", "ferner",
+    "des Weiteren", "nicht zuletzt", "andererseits", "gleichzeitig"
+  ],
+  "floskeln_einleitung": [
+    "In der heutigen Zeit", "In der heutigen schnelllebigen Welt",
+    "In einer Welt, in der", "Immer mehr Menschen fragen sich",
+    "In der heutigen digitalen Welt", "Im digitalen Zeitalter",
+    "Es ist wichtig zu beachten", "Es ist wichtig zu bemerken",
+    "Es ist erwähnenswert", "Es ist allgemein bekannt"
+  ],
+  "floskeln_fazit": [
+    "Zusammenfassend lässt sich sagen", "Abschließend lässt sich sagen",
+    "Insgesamt lässt sich festhalten", "Zusammenfassend kann gesagt werden",
+    "Abschließend kann festgehalten werden", "Zum Abschluss",
+    "Alles in allem", "Die Zukunft sieht", "Aufregende Zeiten"
+  ],
+  "chat_reste": [
+    "Ich hoffe, das hilft", "Ich hoffe, diese Nachricht",
+    "Natürlich!", "Sicherlich!", "Gute Frage!",
+    "Sie haben völlig recht", "Du hast völlig recht",
+    "Lassen Sie mich wissen", "Lass mich wissen",
+    "Möchtest du, dass", "Möchten Sie, dass",
+    "Hier ist eine Übersicht", "Sagen Sie Bescheid", "gibt es noch etwas"
+  ],
+  "wissensluecken": [
+    "Stand meines letzten Wissens", "Bis zu meinem letzten Update",
+    "Stand meines letzten Updates", "Während spezifische Details",
+    "basierend auf verfügbaren Informationen",
+    "in den verfügbaren Quellen", "nicht allgemein dokumentiert"
+  ],
+  "negative_parallelismen": [
+    "nicht nur", "sondern auch", "Es geht nicht nur um",
+    "nicht lediglich", "kein einfacher", "viel mehr als nur"
+  ],
+  "kopula_vermeidung": [
+    "dient als", "fungiert als", "stellt dar", "bildet ab",
+    "zeichnet sich aus", "gilt als", "erweist sich als"
+  ]
+}
