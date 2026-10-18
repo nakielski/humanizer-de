@@ -27,7 +27,8 @@
 - Neu: Einschätzung nach G1, Exit-Code mit `--strict`, `--diff` für Fakten, `--muster`,
   Windows-taugliche UTF-8-Ein- und Ausgabe.
 - Schwellen an 1.028 menschlichen Nachrichtentexten kalibriert (10kGNAD) und an 2.000
-  weiteren geprüft: „auffällig“ bei unter 1 Prozent statt zuvor 13 Prozent.
+  weiteren geprüft: „auffällig“ bei unter 1 Prozent. Mit den Faustregeln aus 0.2.1
+  (CV 0,4, 5 Gedankenstriche pro 1.000 Wörter) wären es 13 Prozent gewesen.
 - JSON-Felder aus 0.2 (`wortfunde`, `trikolon`, `typografie`) bleiben erhalten.
 - Neu: `kalibrieren.py` (Messung an eigener Textsammlung), `export_portabel.py`
   (Kopie nach Agent-Skills-Spezifikation).
