@@ -79,7 +79,7 @@ Jedes Muster beschreibt eine Standardwahl, und ein Mensch kann jede davon bewuss
 
 ## MUSTERKATALOG
 
-40 Muster in sieben Kategorien (A bis G). Nummerierung angelehnt an das englische Original (blader/humanizer), Beispiele komplett auf Deutsch und praxisnah.
+48 Muster in sieben Kategorien (A bis G). Nummerierung angelehnt an das englische Original (blader/humanizer), Beispiele komplett auf Deutsch und praxisnah. A7, B10 bis B12 und C7 bis C10 sind Ergänzungen aus Version 0.3: teils aus blader/humanizer 3.x übernommen, teils deutsch-spezifisch.
 
 **Stärke:** Ein Muster mit *(stark)* rechtfertigt allein eine Änderung. Ein Muster mit *(schwach)* kommt auch in menschlichen Texten oft vor und zählt erst, wenn weitere Muster in derselben Passage auftauchen (G1). F und G sind Prinzipien ohne Stufe. Jedes Beispiel-Nachher enthält nur Fakten aus dem Vorher oder vom Nutzer.
 
@@ -109,6 +109,10 @@ Jedes Muster beschreibt eine Standardwahl, und ein Mensch kann jede davon bewuss
 > Vorher: Trotz der wirtschaftlichen Stärken steht der Stadtteil vor Herausforderungen: Seit 2015 wurden nur 400 neue Wohnungen genehmigt, benötigt würden 2.000. Er bleibt aber ein integraler Bestandteil der urbanen Entwicklung.
 > Nachher: Im Stadtteil fehlen Wohnungen: Seit 2015 wurden nur 400 neue genehmigt, benötigt würden 2.000.
 
+**A7. Strohmann.** (stark) Wörter: „Viele denken, …“, „Die meisten glauben …“, „Falsch.“, „Weit gefehlt.“ Der Text widerlegt eine Position, die niemand vertreten hat, damit die eigene Aussage größer wirkt. Die Aussage direkt machen. Nennt der Text eine echte Gegenposition mit Quelle, bleibt sie.
+> Vorher: Viele denken, gute Dokumentation sei Zeitverschwendung. Falsch. Sie spart neuen Kolleginnen und Kollegen Einarbeitungszeit.
+> Nachher: Gute Dokumentation spart neuen Kolleginnen und Kollegen Einarbeitungszeit.
+
 ### B. Vokabular und Grammatik
 
 **B1. KI-Lieblingsvokabular.** (schwach) Häufige Wörter: „essenziell“, „vielfältig“, „nahtlos“, „maßgeschneidert“, „umfassend“, „ganzheitlich“, „eintauchen“ (figurativ), „präzise“ (als Füll-Adjektiv), „strukturell“, „Robustheit“, „Landschaft“ (im übertragenen Sinn wie „die KI-Landschaft“; Fachbegriffe wie „IT-Landschaft“ sind normal). Die Wörter klingen überzeugt, wo ein Mensch abwägen würde. Für englische Fachtexte ist belegt, dass solche Stilwörter seit 2023 sprunghaft häufiger wurden (Kobak et al. 2025). Für Deutsch fehlt eine vergleichbare Auswertung; die Liste ist Erfahrungswissen und einzeln kein Beweis.
@@ -127,11 +131,11 @@ Jedes Muster beschreibt eine Standardwahl, und ein Mensch kann jede davon bewuss
 > Vorher: Das Event bietet inspirierende Keynotes, spannende Panels und intensive Networking-Möglichkeiten.
 > Nachher: Auf dem Programm stehen Keynotes und Panels. Für Gespräche bleibt ebenfalls Zeit.
 
-**B5. Synonym-Karussell.** (schwach) Dasselbe Konzept wird in aufeinanderfolgenden Sätzen durchsynonymisiert: Protagonist/Hauptfigur/zentrale Figur/Held. Menschen wiederholen das passende Wort; KI variiert künstlich.
+**B5. Synonym-Karussell.** (schwach) Dasselbe Konzept wird in aufeinanderfolgenden Sätzen durchsynonymisiert: Protagonist/Hauptfigur/zentrale Figur/Held. Menschen wiederholen das passende Wort; KI variiert künstlich. blader/humanizer hat das Muster in Version 3.0 gestrichen, weil die englische Wikipedia es inzwischen eher als menschliche Gewohnheit führt. Hier bleibt es als schwaches Signal, das nur in Häufung zählt.
 > Vorher: Der Protagonist wächst an seinen Aufgaben. Die Hauptfigur erhält Unterstützung von der Mentorin. Die zentrale Figur scheitert trotzdem.
 > Nachher: Der Protagonist wächst an seinen Aufgaben, erhält Unterstützung von der Mentorin und scheitert trotzdem.
 
-**B6. Falsche Spannen.** (schwach) „von … bis …“ ohne echte Skala: „von der Fehleranalyse bis zur Prozessoptimierung“. Wenn X und Y nicht auf einer gemeinsamen Skala liegen, ist es ein echtes Spannen-Muster.
+**B6. Falsche Spannen.** (schwach) „von … bis …“ ohne echte Skala: „von der Fehleranalyse bis zur Prozessoptimierung“. Wenn X und Y nicht auf einer gemeinsamen Skala liegen, ist es ein echtes Spannen-Muster. Auch dieses Muster hat blader/humanizer in Version 3.0 gestrichen (laut Wikipedia eher historisch); analyse.py meldet es nur, wenn zwei Spannen in einem Satz stehen.
 > Vorher: Die Reise führte von den Anfängen des Handwerks bis zur Moderne, von traditionellen Techniken bis zu digitalen Werkzeugen.
 > Nachher: Das Buch beschreibt das Handwerk von seinen Anfängen bis heute, einschließlich digitaler Werkzeuge.
 
@@ -146,6 +150,18 @@ Jedes Muster beschreibt eine Standardwahl, und ein Mensch kann jede davon bewuss
 **B9. Autoritäts-Tropen.** (stark) „Die eigentliche Frage ist …“, „Im Kern geht es um …“, „Im Grunde genommen …“, „tiefgreifend“. Feierlicher Anschein von Tiefe, der danach nur Gewöhnliches wiederholt.
 > Vorher: Die eigentliche Frage ist, ob Teams mitziehen. Im Kern geht es um Bereitschaft zur Veränderung.
 > Nachher: Die Frage ist, ob die Teams mitziehen. Das hängt davon ab, ob sie ihre Gewohnheiten ändern wollen.
+
+**B10. Lehnübersetzungen aus dem Englischen.** (schwach) Wörter: „macht Sinn“, „in 2024“, „am Ende des Tages“, „einen Unterschied machen“, „Das gesagt, …“, „Ich bin begeistert, euch mitzuteilen …“. Sprachmodelle lernen überwiegend an englischen Texten, und das schimmert durch. Manche dieser Wendungen sind auch bei Menschen verbreitet („Sinn machen“); die Liste ist eine Hypothese, die noch an einem Korpus geprüft werden muss.
+> Vorher: Am Ende des Tages macht es Sinn, in 2026 auf Cloud-Dienste zu setzen.
+> Nachher: Letztlich ist es sinnvoll, 2026 auf Cloud-Dienste zu setzen.
+
+**B11. Bindestrich-Komposita.** (schwach) „Test-Gerüste“, „Projekt-Ordner“, „Konfigurations-Dateien“. Deutsch schreibt Zusammensetzungen zusammen. Ein Bindestrich ist bei Abkürzungen („KI-Modell“), Eigennamen („Microsoft-Partner“), Zahlen, englischen Bestandteilen und zur Gliederung sehr langer Wörter üblich. Modelle setzen ihn nach englischem Vorbild auch in kurzen, gängigen Komposita. Hypothese, noch nicht am Korpus geprüft; analyse.py zählt es erst ab drei Fällen.
+> Vorher: Die Test-Gerüste und Konfigurations-Dateien liegen im Projekt-Ordner.
+> Nachher: Die Testgerüste und Konfigurationsdateien liegen im Projektordner.
+
+**B12. Gestapelte Relativierungen.** (schwach) „könnte unter Umständen möglicherweise“, „in gewisser Weise eventuell“. Mehrere Abschwächungen in einem Satz, meist Reste aus Überarbeitungsschleifen statt echter Unsicherheit. Eine Relativierung bleibt, wenn der Text einen Grund für Zweifel nennt.
+> Vorher: Das könnte unter Umständen möglicherweise zu gewissen Verzögerungen führen.
+> Nachher: Das kann zu Verzögerungen führen.
 
 ### C. Struktur und Rhythmus
 
@@ -172,6 +188,22 @@ Jedes Muster beschreibt eine Standardwahl, und ein Mensch kann jede davon bewuss
 **C6. Zweiteilige Schablonen-Überschriften.** (schwach) „Anforderungen und Herausforderungen“, „Funktionsweise und Anwendung“, „Geschichte und Bedeutung“. KI erzeugt gehäuft zweiteilige Überschriften, die ein Thema paarig ordnen, wo menschliche Gliederung eher beim konkreten Inhalt bleibt (Wikipedia DE).
 > Vorher: ## Funktionsweise und Anwendung
 > Nachher: ## Wie der Import läuft
+
+**C7. Schablonen-Einstieg und Hinweisfloskeln.** (stark) Wörter: „In der heutigen schnelllebigen Welt“, „Im digitalen Zeitalter“, „In einer Welt, in der …“, „Immer mehr Menschen fragen sich“, „Es ist wichtig zu beachten“, „Es ist erwähnenswert“. Der Einstieg sagt nichts, was der Leser nicht schon weiß, oder kündigt einen Hinweis an, statt ihn zu geben.
+> Vorher: In der heutigen schnelllebigen digitalen Welt spielt Datenschutz eine immer größere Rolle, spätestens seit die DSGVO 2018 in Kraft trat.
+> Nachher: Datenschutz ist wichtiger geworden, spätestens seit die DSGVO 2018 in Kraft trat.
+
+**C8. Rausschmeißer und dramatische Fragmente.** (stark) „Das Ergebnis? Ernüchternd.“, „Bei allem anderen? Eher nicht.“, „Lass das mal sacken.“, „Genau das ist der Punkt.“ Ein Kurzsatz oder ein Frage-Antwort-Paar am Absatzende soll Wirkung erzeugen, ohne etwas hinzuzufügen; typisch für KI-Posts auf LinkedIn. Ein kurzer Satz darf bleiben, wenn er einen neuen Fakt trägt. Eine Reihe von Fragmenten wird zu einem Satz mit konkreter Aussage.
+> Vorher: Wir haben die Prozesse umgestellt. Das Ergebnis? Ein Drittel weniger Tickets. Lass das mal sacken.
+> Nachher: Seit wir die Prozesse umgestellt haben, gehen ein Drittel weniger Tickets ein.
+
+**C9. Inszenierter Anlauf.** (stark) Wörter: „Und jetzt kommt’s:“, „Hier ist der Punkt:“, „Die Wahrheit ist:“, „Der Clou:“, „Spoiler:“. Der Text baut Spannung auf, bevor er die Aussage macht. Direkt mit der Aussage beginnen.
+> Vorher: Und jetzt kommt's: Die Migration hat nur drei Wochen gedauert.
+> Nachher: Die Migration hat nur drei Wochen gedauert.
+
+**C10. Gleiche Satzanfänge.** (schwach) Drei oder mehr Sätze in Folge beginnen gleich („Das Tool prüft … Das Tool erstellt … Das Tool versendet …“). Satzbau variieren oder zusammenziehen.
+> Vorher: Das Tool prüft die Daten. Das Tool erstellt Berichte. Das Tool versendet Warnungen.
+> Nachher: Das Tool prüft die Daten, erstellt Berichte und versendet Warnungen.
 
 ### D. Typografie und Formatierung
 
@@ -250,7 +282,7 @@ Jedes Muster beschreibt eine Standardwahl, und ein Mensch kann jede davon bewuss
 
 ### G. Tödliche Kombination
 
-**G1. Tödliche Kombination.** Ein schwaches Muster allein macht einen Text nicht KI-verdächtig. Zwei oder drei Muster zusammen (etwa Gedankenstrich-Masse, Dreier-Adjektive und die Antithese „nicht X, sondern Y“) lassen ihn schnell maschinell wirken. Der Scan zählt Muster-Dichte, nicht einzelne Treffer. scripts/analyse.py bildet das so ab: „auffällig“ ab zwei starken Mustern, einem starken und zwei schwachen oder vier schwachen; „prüfen“ ab einem starken oder zwei schwachen. Die Schwellen sind Faustregeln, nicht kalibriert.
+**G1. Tödliche Kombination.** Ein schwaches Muster allein macht einen Text nicht KI-verdächtig. Zwei oder drei Muster zusammen (etwa Gedankenstrich-Masse, Dreier-Adjektive und die Antithese „nicht X, sondern Y“) lassen ihn schnell maschinell wirken. Der Scan zählt die Musterdichte, nicht einzelne Treffer. scripts/analyse.py bildet das so ab: „auffällig“ ab zwei starken Mustern, einem starken und zwei schwachen oder vier schwachen; „prüfen“ ab einem starken oder zwei schwachen. Die Schwellen sind Faustregeln, nicht kalibriert.
 
 **G2. Register-Konsistenz.** Kein Muster wirkt isoliert: Der Kontext entscheidet, was auffällt. Ein Bewerbungsschreiben verträgt andere Konnektoren als ein Chat-Posting. Wer alle Muster mechanisch herausstreicht, produziert stimmlosen Durchschnitt statt natürlicher Sprache. Der Katalog beschreibt Tells, keine Verbote: Ein Gedankenstrich bleibt erlaubt, „außerdem“ bleibt erlaubt. Häufung und Monotonie sind das Problem. Bei jedem Streichen prüfen: Passt die Alternative zum Register des Textes und zur Stimme des Autors (falls Schreibprobe vorliegt)?
 
@@ -311,7 +343,8 @@ Muster-freier Text allein reicht nicht. Glattgebügelter, stimmloser Text ist ge
 
 **Änderungen:**
 - Chat-Reste und Servilität gestrichen (E1, E3: „Gute Frage!“, „Ich hoffe, das hilft!“, „Lassen Sie mich wissen“)
-- Einstiegsfloskel und Bedeutungs-Aufblähung gestrichen (A1: „In der heutigen schnelllebigen digitalen Welt“, „Zeugnis für“, „Wendepunkt“, „steht als“)
+- Einstiegsfloskel gestrichen (C7: „In der heutigen schnelllebigen digitalen Welt“)
+- Bedeutungs-Aufblähung gestrichen (A1: „Zeugnis für“, „Wendepunkt“, „steht als“)
 - Werbesprache gestrichen (A4: „bahnbrechenden“, „eingebettet an der Schnittstelle“)
 - Vage Autorität gestrichen (A5: „Branchenbeobachter haben festgestellt“)
 - Antithese und Autoritäts-Trope gestrichen (B3: „Es geht nicht nur um Autocomplete“; B9: „Im Kern“)
