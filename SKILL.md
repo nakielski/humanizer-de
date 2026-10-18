@@ -1,7 +1,7 @@
 ---
 name: humanizer-de
 description: "KI-Muster in deutschen Texten prüfen und entfernen, ohne Fakten zu erfinden. Musterkatalog mit Stärke-Stufen, Stilmessung und Fakten-Abgleich per Skript. Laden bei: humanisieren, ent-KI-en, ChatGPT-Spuren entfernen, KI-Tells prüfen, menschlicher formulieren, Stil-Anpassung mit Schreibprobe."
-version: 0.2.1
+version: 0.3.0
 author: nakielski
 license: MIT
 platforms: [linux, macos, windows]
@@ -155,7 +155,7 @@ Jedes Muster beschreibt eine Standardwahl, und ein Mensch kann jede davon bewuss
 > Vorher: Am Ende des Tages macht es Sinn, in 2026 auf Cloud-Dienste zu setzen.
 > Nachher: Letztlich ist es sinnvoll, 2026 auf Cloud-Dienste zu setzen.
 
-**B11. Bindestrich-Komposita.** (schwach) „Test-Gerüste“, „Projekt-Ordner“, „Konfigurations-Dateien“. Deutsch schreibt Zusammensetzungen zusammen. Ein Bindestrich ist bei Abkürzungen („KI-Modell“), Eigennamen („Microsoft-Partner“), Zahlen, englischen Bestandteilen und zur Gliederung sehr langer Wörter üblich. Modelle setzen ihn nach englischem Vorbild auch in kurzen, gängigen Komposita. Hypothese, noch nicht am Korpus geprüft; analyse.py zählt es erst ab drei Fällen.
+**B11. Bindestrich-Komposita.** (schwach) „Test-Gerüste“, „Projekt-Ordner“, „Konfigurations-Dateien“. Deutsch schreibt Zusammensetzungen zusammen. Ein Bindestrich ist bei Abkürzungen („KI-Modell“), Eigennamen („Microsoft-Partner“), Zahlen, englischen Bestandteilen und zur Gliederung sehr langer Wörter üblich. Modelle setzen ihn nach englischem Vorbild auch in kurzen, gängigen Komposita. Hypothese, noch nicht an KI-Texten geprüft. In menschlichen Nachrichtentexten liegt der Median bei 5 solchen Komposita pro 1.000 Wörter; analyse.py zählt das Muster daher erst ab drei Fällen und mehr als 25 pro 1.000 Wörter.
 > Vorher: Die Test-Gerüste und Konfigurations-Dateien liegen im Projekt-Ordner.
 > Nachher: Die Testgerüste und Konfigurationsdateien liegen im Projektordner.
 
@@ -169,7 +169,7 @@ Jedes Muster beschreibt eine Standardwahl, und ein Mensch kann jede davon bewuss
 > Vorher: Das Tool beschleunigt die Prüfung. Darüber hinaus reduziert es Fehler. Außerdem spart es Kosten. Ferner verbessert es die Nachvollziehbarkeit.
 > Nachher: Das Tool beschleunigt die Prüfung und reduziert Fehler. Das spart Kosten und macht die Ergebnisse nachvollziehbarer.
 
-**C2. Gleichförmige Satzlängen.** (schwach) Menschen mischen kurze und lange Sätze stärker, Modelle bleiben oft in einem engen Band mittlerer Länge. Gleichförmige Satz- und Absatzlängen gehörten zu den Merkmalen, mit denen Desaire et al. (2023) englische ChatGPT-Texte von Fachartikeln unterschieden (20 Merkmale; ganze Dokumente nahezu fehlerfrei, einzelne Absätze zu 92 Prozent). scripts/analyse.py meldet einen Variationskoeffizienten unter 0,4 ab zehn Sätzen. Dieser Schwellwert ist eine Faustregel aus Sekundärquellen und für Deutsch nicht kalibriert, also einzeln nur ein schwaches Signal.
+**C2. Gleichförmige Satzlängen.** (schwach) Menschen mischen kurze und lange Sätze stärker, Modelle bleiben oft in einem engen Band mittlerer Länge. Gleichförmige Satz- und Absatzlängen gehörten zu den Merkmalen, mit denen Desaire et al. (2023) englische ChatGPT-Texte von Fachartikeln unterschieden (20 Merkmale; ganze Dokumente nahezu fehlerfrei, einzelne Absätze zu 92 Prozent). Die oft zitierte Faustregel, ein Variationskoeffizient unter 0,4 sei verdächtig, hält für Deutsch nicht: In 1.028 menschlichen Nachrichtentexten (10kGNAD, 2015/16) lag ein Drittel darunter, der Median bei 0,44. scripts/analyse.py meldet deshalb erst Werte unter 0,3 ab zehn Sätzen; einzeln bleibt das ein schwaches Signal.
 > Vorher: Das Team stellte die Architektur vor. Die Architektur umfasst drei Ebenen. Jede Ebene hat klare Aufgaben. Die Aufgaben sind dokumentiert.
 > Nachher: Das Team stellte die Architektur vor. Drei Ebenen, jede mit klaren, dokumentierten Aufgaben.
 
@@ -356,13 +356,21 @@ Muster-freier Text allein reicht nicht. Glattgebügelter, stimmloser Text ist ge
 
 ## ANALYSE-SKRIPT
 
-scripts/analyse.py misst, was sich zählen lässt:
-- Variationskoeffizient der Satzlängen (Schwellwert 0,4)
-- Füllwort- und KI-Vokabular-Dichte (Wortliste references/wordlist.json)
-- Trikolon-Tendenz (Listen mit exakt drei Items; drei gleich strukturierte Aufzählungen)
-- Typografie-Verdacht (Gedankenstrich-Dichte, US-Anführungszeichen, U+00A0/U+202F, Doppelleerzeichen, •-Bullets, Leerzeichen am Absatzanfang)
+`scripts/analyse.py` misst, was sich zählen lässt, und braucht nur die Python-Standardbibliothek:
 
-Aufruf: python3 scripts/analyse.py <datei> (oder Text via stdin). Das Skript ist eine Hilfe, kein Urteil: Die Muster im Katalog und das eigene Sprachgefühl entscheiden, der Score liefert nur Anhaltspunkte.
+- Wendungen aus `references/wordlist.json` mit Wortgrenzen, Flexion und trennbaren Verben („stellt … dar“); überlappende Treffer zählen einmal
+- Satzlängen und ihr Variationskoeffizient, mit Schutz für Abkürzungen („z. B.“, „Dr.“) und Ordinalzahlen; Überschriften, Listen, Tabellen, Code und Frontmatter zählen nicht als Sätze
+- Strukturmuster: Dreiergruppen (B4), Bindestrich-Komposita (B11), gestapelte Relativierungen (B12), Dreierlisten (C3), Frage-Fragmente (C8), gleiche Satzanfänge (C10), Überschriftenformen (C4, C6, D4a)
+- Typografie: Gedankenstriche ohne Bis-Striche, Anführungszeichen, geschützte und unsichtbare Zeichen, Fettdruck, Emojis, Aufzählungszeichen
+
+```bash
+python3 scripts/analyse.py text.md               # Bericht
+python3 scripts/analyse.py --json text.md        # für Agenten
+python3 scripts/analyse.py --diff alt.md neu.md  # Fakten-Abgleich
+python3 scripts/analyse.py --strict text.md      # Exit-Code 1 bei „auffällig“
+```
+
+Die Einschätzung folgt G1. Die Schwellen der schwachen Signale sind so gesetzt, dass jedes bei etwa 5 Prozent menschlicher Texte anschlägt, gemessen an 1.028 Nachrichtentexten aus dem Korpus 10kGNAD (DER STANDARD, 2015/16). An 2.000 weiteren Texten desselben Korpus ergab das 88 Prozent „unauffällig“, 11 Prozent „prüfen“ und unter 1 Prozent „auffällig“. Gegen KI-Texte ist noch nicht kalibriert; `scripts/kalibrieren.py` misst dafür eine eigene Textsammlung. Das Skript ist eine Hilfe, kein Urteil: Katalog und Sprachgefühl entscheiden.
 
 ## ATTRIBUTION
 
@@ -371,5 +379,7 @@ Basiert auf [blader/humanizer](https://github.com/blader/humanizer) (MIT, Siqi C
 Studien:
 - Desaire et al. (2023): *Distinguishing academic science writing from humans or ChatGPT with over 99% accuracy using off-the-shelf machine learning tools.* Cell Reports Physical Science. Englische Fachtexte, 64 menschliche und 128 ChatGPT-Texte, 20 Merkmale; ganze Dokumente nahezu fehlerfrei, einzelne Absätze zu 92 Prozent zugeordnet.
 - Kobak et al. (2025): *Delving into LLM-assisted writing in biomedical publications through excess vocabulary.* Science Advances 11(27). Über 15 Millionen PubMed-Abstracts aus den Jahren 2010 bis 2024; Stilwörter als Indikator für LLM-Einsatz.
+
+Kalibrierung: [10kGNAD](https://github.com/tblock/10kGNAD) (Ten Thousand German News Articles Dataset, Artikel aus DER STANDARD auf Basis des One Million Posts Corpus, CC BY-NC-SA 4.0). Übernommen wurden nur Kennzahlen, keine Texte.
 
 Deutschsprachige Praxisquellen: korrektur.de (Merkmale-Checkliste, Faustregel für den Variationskoeffizienten), contentconsultants.de (Floskel-Katalog, Gedankenstrich- und Dreier-Adjektiv-Muster), ki-im-marketing.at (Strukturmerkmale). Nummerierung teilweise angelehnt an das englische Original, Beispiele und Formulierungen neu auf Deutsch. Lizenziert unter MIT, siehe LICENSE.
