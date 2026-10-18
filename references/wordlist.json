@@ -1,70 +1,286 @@
 {
-  "ki_vokabular": [
-    "essenziell", "vielfältig", "nahtlos", "maßgeschneidert", "umfassend",
-    "ganzheitlich", "eintauchen", "präzise", "strukturell", "robust",
-    "Landschaft", "nahtlos integriert", "revolutionär", "optimieren",
-    "auf das nächste Level", "Paradigmenwechsel", "transformativ",
-    "bahnbrechend", "innovativ", "cutting-edge", "zustandsbehaftet"
+  "_hinweis": [
+    "Muster-Tabelle und Wortlisten für scripts/analyse.py.",
+    "muster: Name und Stufe jedes Musters A bis E; muss mit SKILL.md übereinstimmen (tests/test_skill.py prüft das).",
+    "kategorien: Einträge sind entweder Wendungen, bei denen * am Wortende Flexion erlaubt ('nahtlos*'), oder Objekte mit 're' (regulärer Ausdruck) und 'label'.",
+    "Groß-/Kleinschreibung wird ignoriert, außer bei 'cs': true. 'satzanfang': true zählt nur Treffer am Satzanfang.",
+    "'min_treffer' legt fest, ab wie vielen Treffern die Kategorie in die Einschätzung eingeht. 'staerke' an einem Eintrag kann eine starke Kategorie für diesen Eintrag auf schwach setzen."
   ],
-  "bedeutungs_aufblaehung": [
-    "Zeugnis für", "steht als", "dient als", "spielt eine wichtige Rolle",
-    "spielt eine entscheidende Rolle", "unterstreicht die Bedeutung",
-    "Wendepunkt", "Schlüsselmoment", "tief verwurzelt",
-    "bleibenden Eindruck", "fasziniert weiterhin", "festigt",
-    "reiches kulturelles Erbe", "reiche Geschichte", "atemberaubend",
-    "bleibendes Vermächtnis", "im Herzen von", "eingebettet in"
-  ],
-  "konnektoren_inflation": [
-    "darüber hinaus", "außerdem", "zusätzlich", "ferner",
-    "des Weiteren", "nicht zuletzt", "andererseits", "gleichzeitig"
-  ],
-  "floskeln_einleitung": [
-    "In der heutigen Zeit", "In der heutigen schnelllebigen Welt",
-    "In einer Welt, in der", "Immer mehr Menschen fragen sich",
-    "In der heutigen digitalen Welt", "Im digitalen Zeitalter",
-    "Es ist wichtig zu beachten", "Es ist wichtig zu bemerken",
-    "Es ist erwähnenswert", "Es ist allgemein bekannt"
-  ],
-  "floskeln_fazit": [
-    "Zusammenfassend lässt sich sagen", "Abschließend lässt sich sagen",
-    "Insgesamt lässt sich festhalten", "Zusammenfassend kann gesagt werden",
-    "Abschließend kann festgehalten werden", "Zum Abschluss",
-    "Alles in allem", "Die Zukunft sieht", "Aufregende Zeiten"
-  ],
-  "chat_reste": [
-    "Ich hoffe, das hilft", "Ich hoffe, diese Nachricht",
-    "Natürlich!", "Sicherlich!", "Gute Frage!",
-    "Sie haben völlig recht", "Du hast völlig recht",
-    "Lassen Sie mich wissen", "Lass mich wissen",
-    "Möchtest du, dass", "Möchten Sie, dass",
-    "Hier ist eine Übersicht", "Sagen Sie Bescheid", "gibt es noch etwas"
-  ],
-  "wissensluecken": [
-    "Stand meines letzten Wissens", "Bis zu meinem letzten Update",
-    "Stand meines letzten Updates", "Während spezifische Details",
-    "basierend auf verfügbaren Informationen",
-    "in den verfügbaren Quellen", "nicht allgemein dokumentiert"
-  ],
-  "negative_parallelismen": [
-    "nicht nur", "sondern auch", "Es geht nicht nur um",
-    "nicht lediglich", "kein einfacher", "viel mehr als nur"
-  ],
-  "kopula_vermeidung": [
-    "dient als", "fungiert als", "stellt dar", "bildet ab",
-    "zeichnet sich aus", "gilt als", "erweist sich als"
-  ],
-  "pfadfinder_ansagen": [
-    "Tauchen wir ein", "Lassen Sie uns eintauchen",
-    "Schauen wir uns das genauer an", "Hier ist, was Sie wissen müssen",
-    "Hier ist, was du wissen musst", "Ohne Umschweife"
-  ],
-  "zuschpruch_kicker": [
-    "Und das ist okay", "Und das ist völlig in Ordnung",
-    "Da ist nichts falsch dran", "Du bist nicht allein",
-    "Das ist völlig normal"
-  ],
-  "autoritaets_tropen": [
-    "Die eigentliche Frage ist", "Im Kern geht es um",
-    "Im Grunde genommen", "tiefgreifend", "das Herz der Sache"
-  ]
+  "muster": {
+    "A1": {"name": "Bedeutungs-Aufblähung", "staerke": "stark"},
+    "A2": {"name": "Notabilitäts-Behauptung", "staerke": "stark"},
+    "A3": {"name": "Angehängte Schein-Analyse", "staerke": "stark"},
+    "A4": {"name": "Werbesprache", "staerke": "stark"},
+    "A5": {"name": "Vage Autoritäten", "staerke": "stark"},
+    "A6": {"name": "Herausforderungen-und-Zukunft-Floskeln", "staerke": "stark"},
+    "A7": {"name": "Strohmann", "staerke": "stark"},
+    "B1": {"name": "KI-Lieblingsvokabular", "staerke": "schwach"},
+    "B2": {"name": "Kopula-Vermeidung", "staerke": "schwach"},
+    "B3": {"name": "Negative Parallelismen", "staerke": "stark"},
+    "B4": {"name": "Trikolon", "staerke": "schwach"},
+    "B5": {"name": "Synonym-Karussell", "staerke": "schwach"},
+    "B6": {"name": "Falsche Spannen", "staerke": "schwach"},
+    "B7": {"name": "Passiv und subjektlose Fragmente", "staerke": "schwach"},
+    "B8": {"name": "Ausgeschriebene Abkürzungen", "staerke": "schwach"},
+    "B9": {"name": "Autoritäts-Tropen", "staerke": "stark"},
+    "B10": {"name": "Lehnübersetzungen aus dem Englischen", "staerke": "schwach"},
+    "B11": {"name": "Bindestrich-Komposita", "staerke": "schwach"},
+    "B12": {"name": "Gestapelte Relativierungen", "staerke": "schwach"},
+    "C1": {"name": "Konnektoren-Inflation", "staerke": "schwach"},
+    "C2": {"name": "Gleichförmige Satzlängen", "staerke": "schwach"},
+    "C3": {"name": "Absatz- und Listensymmetrie", "staerke": "schwach"},
+    "C4": {"name": "Mini-Fazits", "staerke": "stark"},
+    "C5": {"name": "Fragmentierte Absätze", "staerke": "schwach"},
+    "C6": {"name": "Zweiteilige Schablonen-Überschriften", "staerke": "schwach"},
+    "C7": {"name": "Schablonen-Einstieg und Hinweisfloskeln", "staerke": "stark"},
+    "C8": {"name": "Rausschmeißer und dramatische Fragmente", "staerke": "stark"},
+    "C9": {"name": "Inszenierter Anlauf", "staerke": "stark"},
+    "C10": {"name": "Gleiche Satzanfänge", "staerke": "schwach"},
+    "D1": {"name": "Gedankenstriche", "staerke": "schwach"},
+    "D2": {"name": "Falsche Anführungszeichen", "staerke": "schwach"},
+    "D3": {"name": "Geschützte und unsichtbare Zeichen", "staerke": "schwach"},
+    "D4": {"name": "Fett-Mechanik", "staerke": "schwach"},
+    "D4a": {"name": "Großschreibung in Überschriften", "staerke": "schwach"},
+    "D5": {"name": "Emojis", "staerke": "stark"},
+    "D6": {"name": "Aufzählungszeichen-Reste", "staerke": "schwach"},
+    "E1": {"name": "Chat-Reste", "staerke": "stark"},
+    "E2": {"name": "Wissenslücken-Disclaimer", "staerke": "stark"},
+    "E3": {"name": "Servilität", "staerke": "stark"},
+    "E4": {"name": "Genus-Vermeidung", "staerke": "schwach"},
+    "E5": {"name": "Pfadfinder-Ansagen", "staerke": "stark"},
+    "E6": {"name": "Zuspruch-Kicker", "staerke": "stark"}
+  },
+  "kategorien": {
+    "bedeutungs_aufblaehung": {
+      "muster_id": "A1",
+      "eintraege": [
+        "Zeugnis für", "Wendepunkt*", "Schlüsselmoment*", "tief verwurzelt*",
+        "bleibenden Eindruck", "fasziniert weiterhin",
+        {"re": "\\bspiel\\w*\\s+(?:eine\\s+|die\\s+)?(?:wichtige|entscheidende|zentrale|bedeutende|tragende|maßgebliche|Schlüssel)\\w*\\s+Rolle\\b", "label": "spielt eine wichtige/entscheidende Rolle"},
+        {"re": "\\bunterstreich\\w*\\s+(?:die|deren|dessen|seine|ihre)\\s+(?:Bedeutung|Wichtigkeit|Relevanz)\\b", "label": "unterstreicht die Bedeutung"},
+        {"re": "\\bsteht\\s+als\\b", "label": "steht als", "staerke": "schwach"},
+        {"re": "\\b(?:festigt|festigte|festigen|gefestigt)\\b", "label": "festigt", "staerke": "schwach"}
+      ]
+    },
+    "notabilitaet": {
+      "muster_id": "A2",
+      "eintraege": [
+        "unabhängige* Berichterstattung", "überregional* Medien", "aktive* Social-Media-Präsenz",
+        {"re": "\\bführend\\w*\\s+(?:Experte|Expertin|Experten|Stimme|Kopf|Köpfe)\\b", "label": "führender Experte"},
+        {"re": "\\b(?:starke|aktive|große)\\s+Präsenz\\s+in\\s+den\\s+sozialen\\s+Medien\\b", "label": "Präsenz in den sozialen Medien"}
+      ]
+    },
+    "schein_analyse": {
+      "muster_id": "A3",
+      "eintraege": [
+        {"re": ",\\s+(?:was|wodurch|womit)\\b[^.!?;]{0,120}?\\b(?:unterstreich\\w*|unterstrichen|verdeutlich\\w*|hervorheb\\w*|hervorgehoben|widerspiegel\\w*|gewährleist\\w*|betont|betonen)\\b", "label": "…, was … unterstreicht"},
+        {"re": ",\\s+(?:[\\w-]+\\s+){0,5}(?:widerspiegelnd|unterstreichend|hervorhebend|verdeutlichend|betonend)\\b", "label": "…, … widerspiegelnd (Partizip I)"}
+      ]
+    },
+    "werbesprache": {
+      "muster_id": "A4",
+      "eintraege": [
+        "reich* kulturell* Erbe*", "reich* Geschichte", "atemberaubend*",
+        "beeindruckend* natürlich* Schönheit", "unbedingt besuchen", "bleibend* Vermächtnis*",
+        "beeindruckend* Vielfalt",
+        {"re": "\\bim\\s+Herzen\\s+(?:von|der|des)\\b", "label": "im Herzen von"},
+        {"re": "\\beingebettet\\s+(?:in|zwischen)\\b", "label": "eingebettet in", "staerke": "schwach"}
+      ]
+    },
+    "vage_autoritaeten": {
+      "muster_id": "A5",
+      "eintraege": [
+        "Branchenbericht*", "Branchenbeobachter*", "Beobachter führen an",
+        {"re": "\\b(?:viele|zahlreiche|einige|manche|die\\s+meisten)\\s+(?:Experten|Expertinnen|Fachleute|Kritiker|Kritikerinnen|Beobachter|Forscher|Forscherinnen|Analysten|Stimmen)\\b", "label": "viele Experten/Kritiker …"},
+        {"re": "\\bExperten\\s+sind\\s+sich\\s+einig\\b", "label": "Experten sind sich einig"},
+        {"re": "\\b(?:Studien|Untersuchungen|Umfragen)\\s+(?:zeigen|belegen|legen\\s+nahe|haben\\s+gezeigt)\\b", "label": "Studien zeigen"},
+        {"re": "\\blaut\\s+Experten\\b", "label": "laut Experten"}
+      ]
+    },
+    "herausforderungen": {
+      "muster_id": "A6",
+      "eintraege": [
+        "integral* Bestandteil*", "Zukunftsaussichten",
+        {"re": "\\bsteh\\w*\\s+(?:[\\w-]+\\s+){0,3}vor\\s+(?:[\\w-]+\\s+)?Herausforderungen\\b", "label": "steht vor Herausforderungen"},
+        {"re": "\\bTrotz\\s+(?:der|dieser|aller|seiner|ihrer|dieses|des)\\s+(?:[\\w-]+\\s+)?(?:Erfolge?s?|Stärken|Fortschritte?s?|Vorteile?s?)\\b", "label": "Trotz dieser Erfolge …"}
+      ]
+    },
+    "strohmann": {
+      "muster_id": "A7",
+      "eintraege": [
+        {"re": "\\b(?:viele|die\\s+meisten|manche|einige)\\s+(?:denken|glauben|meinen|behaupten|sind\\s+überzeugt)\\b", "label": "Viele denken …"},
+        {"re": "(?:^|(?<=[.!?:])\\s+)(?:Falsch|Weit\\s+gefehlt|Mitnichten|Irrtum)[.!]", "label": "Falsch.", "cs": true}
+      ]
+    },
+    "ki_vokabular": {
+      "muster_id": "B1",
+      "eintraege": [
+        "essenziell*", "essentiell*", "vielfältig*", "nahtlos*", "maßgeschneidert*", "umfassend*",
+        "ganzheitlich*", "eintauch*", "präzise*", "strukturell*", "Robustheit", "transformativ*",
+        "bahnbrechend*", "revolutionär*", "Paradigmenwechsel*", "innovativ*", "cutting-edge",
+        {"re": "\\bauf\\s+(?:das|ein)\\s+(?:nächste|neues)\\s+Level\\b", "label": "auf das nächste Level"},
+        "aufs nächste Level"
+      ]
+    },
+    "kopula_vermeidung": {
+      "muster_id": "B2",
+      "eintraege": [
+        {"re": "\\bdien(?:t|en|te|ten)\\s+(?:[\\w-]+\\s+){0,2}?als\\b", "label": "dient als"},
+        {"re": "\\bfungier\\w*\\s+(?:[\\w-]+\\s+){0,2}?als\\b", "label": "fungiert als"},
+        {"re": "\\bstell(?:t|en|te|ten)\\b[^.!?;:]{1,80}?\\bdar\\b", "label": "stellt … dar"},
+        {"re": "\\bdar(?:stellt|stellen|stellte|stellten)\\b", "label": "darstellt"},
+        {"re": "\\bbild(?:et|en|ete|eten)\\b[^.!?;:,]{1,60}?\\bab\\b", "label": "bildet … ab"},
+        {"re": "\\babbild(?:et|en|ete|eten)\\b", "label": "abbildet"},
+        {"re": "\\bzeichn(?:et|en|ete|eten)\\s+sich\\b[^.!?;:,]{1,100}?\\baus\\b", "label": "zeichnet sich … aus"},
+        {"re": "\\bauszeichn(?:et|en|ete|eten)\\b", "label": "auszeichnet"}
+      ]
+    },
+    "negative_parallelismen": {
+      "muster_id": "B3",
+      "eintraege": [
+        {"re": "\\bEs\\s+geht\\s+(?:hier\\s+)?nicht\\s+(?:(?:nur|bloß|lediglich|einfach)\\s+)?um\\b", "label": "Es geht nicht (nur) um …"},
+        {"re": "\\b(?:Das|Es|Dies)\\s+ist\\s+nicht\\b[^.!?\\n]{1,60}[.!]\\s+(?:Das|Es|Dies)\\s+ist\\b", "label": "Das ist nicht X. Das ist Y.", "cs": true},
+        {"re": "\\bkein(?:e|en)?\\s+(?:bloße[sn]?|einfache[sn]?)\\s+[\\w-]+[^.!?]{0,40}?,\\s+sondern\\b", "label": "kein bloßes X, sondern …"},
+        "viel mehr als nur",
+        {"re": "\\bnicht\\s+(?:nur|bloß|lediglich)\\b[^.!?]{1,120}?\\bsondern\\s+auch\\b", "label": "nicht nur … sondern auch", "staerke": "schwach"}
+      ]
+    },
+    "falsche_spannen": {
+      "muster_id": "B6",
+      "eintraege": [
+        {"re": "\\bvon\\s+(?:[^\\W\\d_]+\\s+){1,5}bis\\s+(?:zur|zum|zu|hin\\s+zu)\\s+[^.!?]{1,80}?,\\s*von\\s+(?:[^\\W\\d_]+\\s+){1,5}bis\\s+(?:zur|zum|zu|hin\\s+zu)\\b", "label": "von … bis …, von … bis …"}
+      ]
+    },
+    "abkuerzungen_ausgeschrieben": {
+      "muster_id": "B8",
+      "min_treffer": 2,
+      "eintraege": [
+        "zum Beispiel", "unter anderem", "beziehungsweise",
+        {"re": ",\\s+das\\s+heißt\\b", "label": ", das heißt"}
+      ]
+    },
+    "autoritaets_tropen": {
+      "muster_id": "B9",
+      "eintraege": [
+        "Die eigentliche Frage ist", "Im Grunde genommen", "das Herz der Sache",
+        {"re": "\\bIm\\s+Kern\\s+(?:geht\\s+es|ist|bedeutet|steht)\\b", "label": "Im Kern geht es um / ist"},
+        {"re": "\\bWorauf\\s+es\\s+(?:wirklich|eigentlich)\\s+ankommt\\b", "label": "Worauf es wirklich ankommt"},
+        {"re": "\\bwas\\s+wirklich\\s+zählt\\b", "label": "was wirklich zählt"},
+        {"re": "\\bim\\s+Grunde\\b", "label": "im Grunde", "staerke": "schwach"},
+        {"re": "\\btiefgreifend\\w*", "label": "tiefgreifend", "staerke": "schwach"}
+      ]
+    },
+    "lehnuebersetzungen": {
+      "muster_id": "B10",
+      "eintraege": [
+        {"re": "\\bmach\\w*\\s+(?:[\\wäöüß]+\\s+){0,3}?Sinn\\b", "label": "macht Sinn"},
+        {"re": "\\bSinn\\s+mach\\w*\\b", "label": "Sinn machen"},
+        {"re": "\\bin\\s+(?:19|20)\\d{2}\\b(?!\\s*(?:[-–]|bis))", "label": "in 2024"},
+        {"re": "\\bam\\s+Ende\\s+des\\s+Tages\\b", "label": "am Ende des Tages"},
+        {"re": "\\beinen?\\s+(?:großen\\s+|echten\\s+|riesigen\\s+|spürbaren\\s+)?Unterschied\\s+mach\\w*\\b", "label": "einen Unterschied machen"},
+        {"re": "\\bDas\\s+gesagt,", "label": "Das gesagt, …", "cs": true},
+        {"re": "\\b(?:Ich\\s+bin|Wir\\s+sind)\\s+(?:so\\s+)?(?:begeistert|stolz|glücklich|froh|aufgeregt),?\\s+(?:euch|Ihnen|dir)\\b", "label": "Ich bin begeistert, euch …"},
+        {"re": "\\brealisier\\w*,?\\s+dass\\b", "label": "realisieren (= bemerken)"}
+      ]
+    },
+    "konnektoren": {
+      "muster_id": "C1",
+      "satzanfang": true,
+      "cs": true,
+      "min_treffer": 2,
+      "eintraege": [
+        "Darüber hinaus", "Außerdem", "Zusätzlich", "Ferner", "Des Weiteren", "Nicht zuletzt",
+        "Zudem", "Überdies"
+      ]
+    },
+    "aufzaehlungssymmetrie": {
+      "muster_id": "C3",
+      "eintraege": [
+        {"re": "\\bErstens\\b[\\s\\S]{1,400}?\\bZweitens\\b[\\s\\S]{1,400}?\\bDrittens\\b", "label": "Erstens … Zweitens … Drittens"}
+      ]
+    },
+    "floskeln_fazit": {
+      "muster_id": "C4",
+      "eintraege": [
+        {"re": "\\b(?:Zusammenfassend|Abschließend|Insgesamt|Resümierend)\\s+(?:lässt\\s+sich|kann\\s+man|kann|muss\\s+man|bleibt)\\b", "label": "Zusammenfassend lässt sich …"},
+        {"re": "\\bbleibt\\s+(?:also\\s+)?festzuhalten\\b", "label": "bleibt festzuhalten"},
+        "Die Zukunft sieht", "Aufregende Zeiten",
+        {"re": "\\bAlles\\s+in\\s+allem\\b", "label": "Alles in allem", "staerke": "schwach"},
+        {"re": "\\bZum\\s+Abschluss\\b", "label": "Zum Abschluss", "staerke": "schwach"}
+      ]
+    },
+    "floskeln_einleitung": {
+      "muster_id": "C7",
+      "eintraege": [
+        {"re": "\\bIn\\s+der\\s+heutigen\\s+(?:[\\w-]+\\s+){0,3}(?:Zeit|Welt|Gesellschaft|Arbeitswelt|Geschäftswelt|Ära)\\b", "label": "In der heutigen (schnelllebigen) Welt"},
+        "Im digitalen Zeitalter", "In einer Welt, in der", "Immer mehr Menschen fragen sich",
+        {"re": "\\bEs\\s+ist\\s+(?:wichtig|entscheidend|wesentlich)\\s+zu\\s+(?:beachten|bemerken|betonen|verstehen)\\b", "label": "Es ist wichtig zu beachten"},
+        {"re": "\\bEs\\s+ist\\s+(?:erwähnenswert|bemerkenswert|allgemein\\s+bekannt)\\b", "label": "Es ist erwähnenswert"}
+      ]
+    },
+    "rausschmeisser": {
+      "muster_id": "C8",
+      "eintraege": [
+        {"re": "\\bLass(?:t)?\\s+(?:das|uns\\s+das)\\s+(?:mal\\s+)?sacken\\b", "label": "Lass das mal sacken"},
+        {"re": "\\bLies\\s+das\\s+(?:noch\\s?mal|ein\\s+zweites\\s+Mal)\\b", "label": "Lies das nochmal"},
+        "Genau das ist der Punkt",
+        {"re": "\\bDas\\s+ist\\s+der\\s+(?:eigentliche|wahre|echte)\\s+(?:Gewinn|Punkt|Unterschied|Hebel)\\b", "label": "Das ist der eigentliche Gewinn"},
+        "Das macht den Unterschied"
+      ]
+    },
+    "anlauf": {
+      "muster_id": "C9",
+      "eintraege": [
+        {"re": "\\b(?:Und\\s+)?(?:jetzt|hier)\\s+kommt['’]?s\\b", "label": "Und jetzt kommt’s"},
+        {"re": "\\b(?:Hier\\s+ist\\s+(?:der\\s+Punkt|das\\s+Ding|die\\s+Sache)|Die\\s+Wahrheit(?:\\s+ist)?|Der\\s+(?:Clou|Twist|Kniff)|Spoiler|Das\\s+(?:Beste|Spannende|Verrückte|Überraschende)\\s+daran)\\s*:", "label": "Der Clou: / Die Wahrheit ist:", "cs": true}
+      ]
+    },
+    "chat_reste": {
+      "muster_id": "E1",
+      "eintraege": [
+        "Ich hoffe, das hilft", "Ich hoffe, diese Nachricht", "Natürlich!", "Sicherlich!",
+        {"re": "\\bMöchte(?:st\\s+du|n\\s+Sie)\\s*,?\\s+dass\\b", "label": "Möchtest du, dass …"},
+        {"re": "\\bHier\\s+(?:ist|sind)\\s+(?:eine|ein|die|einige)\\s+(?:kurze\\s+|kompakte\\s+)?(?:Übersicht|Zusammenfassung|Überblick|Liste|Vorschläge?|Ideen|Entwurf)\\b", "label": "Hier ist eine Übersicht"},
+        {"re": "\\bGibt\\s+es\\s+noch\\s+etwas,?\\s+(?:das|was|bei\\s+dem)\\s+ich\\b", "label": "Gibt es noch etwas, das ich …"},
+        {"re": "\\bLass(?:en\\s+Sie|t)?\\s+mich\\s+wissen\\b", "label": "Lassen Sie mich wissen", "staerke": "schwach"},
+        {"re": "\\bSag(?:en\\s+Sie|t)?\\s+(?:gern\\w*\\s+)?Bescheid\\b", "label": "Sagen Sie Bescheid", "staerke": "schwach"}
+      ]
+    },
+    "wissensluecken": {
+      "muster_id": "E2",
+      "eintraege": [
+        "Stand meines letzten Wissens", "Bis zu meinem letzten Update", "Stand meines letzten Updates",
+        "basierend auf verfügbaren Informationen", "in den verfügbaren Quellen",
+        "nicht allgemein dokumentiert", "Zum Zeitpunkt meines Trainings",
+        {"re": "\\b(?:Während|Obwohl|Da)\\s+(?:spezifische|genaue|detaillierte|konkrete)\\s+(?:Details|Informationen|Angaben)\\b[^.!?]{0,40}?\\b(?:rar|begrenzt|spärlich|nicht\\s+verfügbar)", "label": "Während spezifische Details rar sind"}
+      ]
+    },
+    "servilitaet": {
+      "muster_id": "E3",
+      "eintraege": [
+        "Gute Frage!", "Was für eine tolle Frage",
+        {"re": "\\b(?:Sie\\s+haben|Du\\s+hast)\\s+(?:völlig|absolut|vollkommen|total)\\s+recht\\b", "label": "Sie haben völlig recht"},
+        {"re": "\\bDas\\s+ist\\s+eine?\\s+(?:exzellente|ausgezeichnete|großartige|hervorragende|sehr\\s+gute)[nr]?\\s+(?:Punkt|Frage|Anmerkung|Beobachtung)\\b", "label": "Das ist ein exzellenter Punkt"}
+      ]
+    },
+    "pfadfinder_ansagen": {
+      "muster_id": "E5",
+      "eintraege": [
+        {"re": "\\bOhne\\s+Umschweife\\b", "label": "Ohne Umschweife", "staerke": "schwach"},
+        {"re": "\\bTauchen\\s+wir\\s+(?:[\\w-]+\\s+){0,6}?ein\\b", "label": "Tauchen wir ein"},
+        {"re": "\\bLass(?:en\\s+Sie|t)?\\s+uns\\s+(?:[\\w-]+\\s+){0,4}?eintauchen\\b", "label": "Lassen Sie uns eintauchen"},
+        {"re": "\\bSchauen\\s+wir\\s+uns\\b[^.!?]{0,40}?\\b(?:genauer|näher|einmal|mal)\\s+an\\b", "label": "Schauen wir uns das genauer an"},
+        {"re": "\\bHier\\s+ist,\\s+was\\s+(?:Sie|du|ihr)\\s+wissen\\s+(?:müssen|musst|müsst)\\b", "label": "Hier ist, was Sie wissen müssen"},
+        {"re": "\\bWerfen\\s+wir\\s+(?:nun\\s+)?einen\\s+(?:genaueren\\s+|näheren\\s+)?Blick\\b", "label": "Werfen wir einen Blick"}
+      ]
+    },
+    "zuspruch_kicker": {
+      "muster_id": "E6",
+      "eintraege": [
+        "Und das ist okay", "Und das ist völlig in Ordnung", "Und das ist in Ordnung",
+        "Da ist nichts falsch dran", "Das ist völlig normal",
+        {"re": "\\b(?:Du\\s+bist|Sie\\s+sind|Ihr\\s+seid)\\s+(?:damit\\s+)?nicht\\s+allein\\b", "label": "Du bist nicht allein"}
+      ]
+    }
+  }
 }
