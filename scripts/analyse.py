@@ -626,7 +626,8 @@ def komma_vor_und_stellen(text):
             continue
         if im_code:
             continue
-        rumpf = re.sub(r"`[^`]*`", lambda m: " " * len(m.group(0)), zeile)
+        # Inline-Code als Platzhalterwort gleicher Länge, damit „`a`, `b` und“ kein „, und“ ergibt
+        rumpf = re.sub(r"`[^`]*`", lambda m: "C" * len(m.group(0)), zeile)
         for m in KOMMA_UND_RE.finditer(rumpf):
             davor = rumpf[:m.start()]
             satz = re.split(r"[.!?:;]\s", davor)[-1]

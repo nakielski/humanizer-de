@@ -320,6 +320,10 @@ def test_pflichtkomma_bleibt(text):
     assert _kommas(text) == ["pflicht"], text
 
 
+def test_inline_code_in_aufzaehlung_ist_kein_komma_vor_und():
+    assert _kommas("Es entstehen `SKILL.md`, `scripts/` und `references/`.") == []
+
+
 def test_komma_regel_exit_code():
     assert lauf("--ohne-komma-vor-und", "-", text="Es regnet, und wir bleiben.")[0] == 1
     assert lauf("--ohne-komma-vor-und", "-", text="Er sagte, dass er kommt, und ging.")[0] == 0
