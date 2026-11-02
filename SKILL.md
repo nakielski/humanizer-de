@@ -1,6 +1,6 @@
 ---
 name: humanizer-de
-description: "KI-Muster in deutschen Texten prüfen und entfernen, ohne Fakten zu erfinden. 48 Muster mit Stärke-Stufen, Hausregeln wie „keine Gedankenstriche“, Stilmessung und Fakten-Abgleich per Skript. Laden bei: humanisieren, ent-KI-en, KI-Tells prüfen, menschlicher formulieren, Stil-Anpassung mit Schreibprobe, und immer dann, wenn für den Nutzer deutscher Text entsteht (Mail, Post, Präsentation, Doku)."
+description: "KI-Muster in deutschen Texten prüfen und entfernen, ohne Fakten zu erfinden. 48 Muster mit Stärke-Stufen, Hausregeln (keine Gedankenstriche, kein Komma vor „und“), Stilmessung und Fakten-Abgleich per Skript. Laden bei: humanisieren, ent-KI-en, KI-Tells prüfen, menschlicher formulieren, Stil-Anpassung mit Schreibprobe und immer dann, wenn für den Nutzer deutscher Text entsteht (Mail, Post, Präsentation, Doku)."
 version: 0.4.0
 author: nakielski
 license: MIT
@@ -27,15 +27,21 @@ Diese Regeln gelten in jedem Modus und gehen jedem Muster vor.
 
 ## Hausregeln
 
-Hausregeln sind feste Vorgaben des Nutzers, etwa aus seinem Styleguide, seinem Profil oder seinen gespeicherten Präferenzen. Sie sind keine Muster mit Schwelle, sondern Verbote ohne Toleranz: Ein einziger Verstoß ist ein Fehler, auch wenn der Text sonst „unauffällig“ ist. Die Musterstufen, G1 und G2 gelten für sie nicht.
+Hausregeln sind feste Vorgaben des Nutzers (Styleguide, Profil, gespeicherte Präferenzen). Sie gelten ohne Toleranz: Ein einziger Verstoß ist ein Fehler, auch in einem „unauffälligen“ Text. Musterstufen, G1 und G2 gelten für sie nicht.
 
 **Keine Gedankenstriche** ist die häufigste Hausregel. Dann gilt:
 
 - Verboten sind Halbgeviertstrich mit Leerzeichen („ – “), Geviertstrich (U+2014, mit oder ohne Leerzeichen) und der Bindestrich als Ersatz („Wort - Wort“). Ein Strich gegen einen anderen zu tauschen, erfüllt die Regel nicht.
 - Erlaubt bleiben Bis- und Streckenstriche ohne Leerzeichen („12–14“, „Köln–Bonn“), Bindestriche in Wörtern („KI-Modell“) und Listenmarken.
 - Den Satz umbauen, nicht nur das Zeichen tauschen: Einschub als Nebensatz oder in Klammern, Nachtrag als eigener Satz, Erklärung nach Doppelpunkt. Doppelpunkte nicht ihrerseits häufen.
-- Auch Titel, Überschriften, Folien, Bildunterschriften, Notizen und Dateinamen prüfen, nicht nur Fließtext.
+- Auch Titel, Folien, Notizen und Dateinamen prüfen.
 - Vor der Ausgabe mechanisch prüfen (Ablauf, Schritt 5). Modelle setzen Gedankenstriche aus Gewohnheit.
+
+**Kein Komma vor „und“ oder „oder“** ist eine weitere häufige Hausregel. Dann gilt:
+
+- Weg mit dem Kann-Komma zwischen zwei Hauptsätzen („Es regnet, und wir bleiben“) und dem Komma vor dem letzten Glied einer Aufzählung („Äpfel, Birnen, und Kirschen“; im Deutschen ohnehin falsch).
+- Das Pflichtkomma bleibt: Es schließt einen Nebensatz, Relativsatz, Einschub oder eine Infinitivgruppe, die vor dem „und“ endet („Er sagte, dass er kommt, und ging“). Ohne dieses Komma wäre der Satz falsch.
+- Prüfen mit `analyse.py --ohne-komma-vor-und`; das Skript trennt Kann- und Pflichtkommas heuristisch, gemeldete Pflichtkommas kurz gegenlesen.
 
 Gilt eine Hausregel immer, gehört sie zusätzlich in die dauerhafte Konfiguration des Agenten (Profil, Systemprompt), sonst greift sie nicht, wenn dieser Skill nicht geladen ist.
 
@@ -51,10 +57,10 @@ Gilt eine Hausregel immer, gehört sie zusätzlich in die dauerhafte Konfigurati
 ### Ablauf
 
 1. **Messen.** `python3 scripts/analyse.py --json <datei>` (oder Text über stdin), mit `--ohne-gedankenstriche`, wenn diese Hausregel gilt. Ohne Python den Schritt auslassen und das sagen.
-2. **Markieren.** Den Text vollständig gegen den Katalog lesen, starke Muster zuerst, auch auf Absatzebene (Antithese über zwei Sätze, derselbe Schlusssatz nach jedem Abschnitt). Das Skript findet nicht alles (z. B. B5, C5, F1 bis F3), und nicht jeder Treffer ist ein Tell.
+2. **Markieren.** Den Text vollständig gegen den Katalog lesen, starke Muster zuerst, auch auf Absatzebene (Antithese über zwei Sätze, derselbe Schlusssatz nach jedem Abschnitt). Das Skript findet nicht alles (z. B. B5, C5, F1 bis F3) und nicht jeder Treffer ist ein Tell.
 3. **Entwerfen.** Absätze vom Kernpunkt her neu schreiben, statt Wendungen einzeln zu tauschen. Fehlen Details oder Haltung: nachfragen oder Platzhalter.
 4. **Gegenlesen.** Laut lesen: Was wirkt noch generiert? Fakten-Abgleich mit `analyse.py --diff original.md neu.md`: Jede neue Angabe muss vom Nutzer stammen, jede verlorene muss ein Muster rechtfertigen.
-5. **Hausregeln prüfen.** `analyse.py --ohne-gedankenstriche neu.md` muss Exit-Code 0 liefern. Ohne Skript gleichwertig: `grep -nP ' [\x{2013}-] |\x{2014}' neu.md` darf nichts finden. Jede gemeldete Stelle umschreiben und erneut prüfen. Im Modus Eingebettet gilt das genauso, nur ohne Bericht.
+5. **Hausregeln prüfen.** `analyse.py --ohne-gedankenstriche --ohne-komma-vor-und neu.md` (je nach geltenden Regeln) muss Exit-Code 0 liefern. Ohne Skript gleichwertig: `grep -nP ' [\x{2013}-] |\x{2014}' neu.md` darf nichts finden. Jede gemeldete Stelle umschreiben und erneut prüfen. Im Modus Eingebettet gilt das genauso, nur ohne Bericht.
 6. **Abschließen.** Finale Fassung, offene Punkte (Platzhalter, Rückfragen) darunter.
 
 ### Ausgabe je Modus
@@ -70,11 +76,11 @@ Jedes Muster beschreibt eine Standardwahl, die ein Mensch auch bewusst treffen k
 
 - **Zitate, Titel, Eigennamen, Fachbegriffe** bleiben („IT-Landschaft“, ein Buchtitel mit „Wendepunkt“).
 - **Metasprache:** Ein Text, der über eine Wendung spricht, benutzt sie nicht.
-- **Alte Texte:** Vor dem 30. November 2022 (Start von ChatGPT) Geschriebenes ist praktisch nie KI-generiert.
+- **Alte Texte:** Vor dem 30. November 2022 (Start von ChatGPT) Geschriebenes ist kaum KI-generiert.
 - **Briefkonventionen:** Anrede und Grußformel sind älter als jeder Chatbot.
 - **Register:** Fachtexte dürfen Passiv und Nominalstil, Social-Media-Posts Emojis.
 - **Typografie:** „…“ und »…« sind beide korrektes Deutsch, in der Schweiz «…».
-- **Stimme:** Was den Autor ausmacht, bleibt, auch wenn es unglatt ist.
+- **Stimme:** Was den Autor ausmacht, bleibt.
 
 ## MUSTERKATALOG
 
@@ -86,7 +92,7 @@ Jedes Muster beschreibt eine Standardwahl, die ein Mensch auch bewusst treffen k
 > Vorher: Das Statistische Institut wurde 1989 gegründet und markiert einen Wendepunkt in der Geschichte der Regionalstatistik.
 > Nachher: Das Statistische Institut wurde 1989 gegründet.
 
-**A2. Notabilitäts-Behauptung.** (stark) „überregionale Medien“, „führender Experte“, „aktive Social-Media-Präsenz“. Behauptete statt belegter Bedeutung. Belege nach vorn, leere Behauptungen streichen.
+**A2. Notabilitäts-Behauptung.** (stark) „überregionale Medien“, „führender Experte“, „aktive Social-Media-Präsenz“. Belege nach vorn, leere Behauptungen streichen.
 > Vorher: Ihre Ansichten wurden von zahlreichen überregionalen Medien aufgegriffen, darunter ein Interview mit der Zeit im März 2024. Sie unterhält eine aktive Social-Media-Präsenz.
 > Nachher: Im März 2024 gab sie der Zeit ein Interview.
 
@@ -94,7 +100,7 @@ Jedes Muster beschreibt eine Standardwahl, die ein Mensch auch bewusst treffen k
 > Vorher: Die Farbpalette blau-gold-grün spiegelt die landschaftliche Vielfalt der Region wider, was die tiefe Verbindung der Gemeinde zu ihrer Umwelt unterstreicht.
 > Nachher: Die Farbpalette greift die Landschaft der Region auf.
 
-**A4. Werbesprache.** (stark) „reiches kulturelles Erbe“, „atemberaubend“, „eingebettet in“, „im Herzen von“, „unbedingt besuchen“. Modelle halten keinen neutralen Ton.
+**A4. Werbesprache.** (stark) „reiches kulturelles Erbe“, „atemberaubend“, „eingebettet in“, „im Herzen von“. Modelle halten keinen neutralen Ton.
 > Vorher: Eingebettet in die atemberaubende Landschaft der Dolomiten, beeindruckt der Ort mit einem reichen kulturellen Erbe, darunter zwei Kirchen aus dem 16. Jahrhundert.
 > Nachher: Der Ort liegt in den Dolomiten und hat zwei Kirchen aus dem 16. Jahrhundert.
 
@@ -128,11 +134,11 @@ Jedes Muster beschreibt eine Standardwahl, die ein Mensch auch bewusst treffen k
 > Vorher: Das Event bietet inspirierende Keynotes, spannende Panels und intensive Networking-Möglichkeiten.
 > Nachher: Auf dem Programm stehen Keynotes und Panels. Für Gespräche bleibt ebenfalls Zeit.
 
-**B5. Synonym-Karussell.** (schwach) Dasselbe Konzept wird von Satz zu Satz umbenannt. Menschen wiederholen das passende Wort. In der aktuellen Fassung von blader/humanizer nicht mehr enthalten; hier ein schwaches Signal.
+**B5. Synonym-Karussell.** (schwach) Dasselbe Konzept wird von Satz zu Satz umbenannt; Menschen wiederholen das passende Wort. Bei blader/humanizer inzwischen gestrichen.
 > Vorher: Der Protagonist wächst an seinen Aufgaben. Die Hauptfigur erhält Unterstützung von der Mentorin. Die zentrale Figur scheitert trotzdem.
 > Nachher: Der Protagonist wächst an seinen Aufgaben, erhält Unterstützung von der Mentorin und scheitert trotzdem.
 
-**B6. Falsche Spannen.** (schwach) „von … bis …“ ohne gemeinsame Skala. Ebenfalls nicht mehr bei blader/humanizer; analyse.py meldet es erst bei zwei Spannen in einem Satz.
+**B6. Falsche Spannen.** (schwach) „von … bis …“ ohne gemeinsame Skala. Bei blader/humanizer ebenfalls gestrichen.
 > Vorher: Die Reise führte von den Anfängen des Handwerks bis zur Moderne, von traditionellen Techniken bis zu digitalen Werkzeugen.
 > Nachher: Das Buch beschreibt das Handwerk von seinen Anfängen bis heute, einschließlich digitaler Werkzeuge.
 
@@ -152,7 +158,7 @@ Jedes Muster beschreibt eine Standardwahl, die ein Mensch auch bewusst treffen k
 > Vorher: Am Ende des Tages macht es Sinn, in 2026 auf Cloud-Dienste zu setzen.
 > Nachher: Letztlich ist es sinnvoll, 2026 auf Cloud-Dienste zu setzen.
 
-**B11. Bindestrich-Komposita.** (schwach) „Test-Gerüste“, „Projekt-Ordner“. Deutsch schreibt Zusammensetzungen zusammen; der Bindestrich ist üblich bei Abkürzungen („KI-Modell“), Eigennamen, Zahlen, englischen Teilen und zur Gliederung langer Wörter. analyse.py zählt erst ab drei Fällen und 25 pro 1.000 Wörter.
+**B11. Bindestrich-Komposita.** (schwach) „Test-Gerüste“, „Projekt-Ordner“. Deutsch schreibt Zusammensetzungen zusammen; der Bindestrich ist üblich bei Abkürzungen („KI-Modell“), Eigennamen, Zahlen, englischen Teilen und sehr langen Wörtern.
 > Vorher: Die Test-Gerüste und Konfigurations-Dateien liegen im Projekt-Ordner.
 > Nachher: Die Testgerüste und Konfigurationsdateien liegen im Projektordner.
 
@@ -166,7 +172,7 @@ Jedes Muster beschreibt eine Standardwahl, die ein Mensch auch bewusst treffen k
 > Vorher: Das Tool beschleunigt die Prüfung. Darüber hinaus reduziert es Fehler. Außerdem spart es Kosten. Ferner verbessert es die Nachvollziehbarkeit.
 > Nachher: Das Tool beschleunigt die Prüfung und reduziert Fehler. Das spart Kosten und macht die Ergebnisse nachvollziehbarer.
 
-**C2. Gleichförmige Satzlängen.** (schwach) Menschen mischen Satzlängen stärker (Desaire et al. 2023). Die Faustregel „Variationskoeffizient unter 0,4“ hält für Deutsch nicht (menschlicher Median 0,44 in 10kGNAD); analyse.py meldet erst unter 0,3 ab zehn Sätzen.
+**C2. Gleichförmige Satzlängen.** (schwach) Menschen mischen Satzlängen stärker (Desaire et al. 2023). analyse.py meldet erst einen Variationskoeffizienten unter 0,3 ab zehn Sätzen (menschlicher Median 0,44).
 > Vorher: Das Team stellte die Architektur vor. Die Architektur umfasst drei Ebenen. Jede Ebene hat klare Aufgaben. Die Aufgaben sind dokumentiert.
 > Nachher: Das Team stellte die Architektur vor. Drei Ebenen, jede mit klaren, dokumentierten Aufgaben.
 
@@ -250,7 +256,7 @@ Jedes Muster beschreibt eine Standardwahl, die ein Mensch auch bewusst treffen k
 > Vorher: Die Fachkraft prüft die Daten, die Person entscheidet, das Individuum verantwortet.
 > Nachher: Die Fachkraft prüft die Daten, entscheidet und trägt die Verantwortung.
 
-**E5. Pfadfinder-Ansagen.** (stark) „Tauchen wir ein …“, „Schauen wir uns das genauer an …“, „Hier ist, was Sie wissen müssen“. Die Ankündigung ersetzt das Tun.
+**E5. Pfadfinder-Ansagen.** (stark) „Tauchen wir ein …“, „Hier ist, was Sie wissen müssen“. Die Ankündigung ersetzt das Tun.
 > Vorher: Tauchen wir ein in die Welt der Container-Netzwerke. Hier ist, was Sie wissen müssen: Docker bringt mehrere Netzwerktreiber mit, etwa Bridge und Overlay.
 > Nachher: Docker bringt mehrere Netzwerktreiber mit, etwa Bridge und Overlay.
 
@@ -262,7 +268,7 @@ Jedes Muster beschreibt eine Standardwahl, die ein Mensch auch bewusst treffen k
 
 **F1. Meinungslosigkeit.** Nur neutrales Berichten. Die Haltung muss vom Autor kommen (Text, Schreibprobe, Nachfrage); das Modell erfindet keine.
 > Vorher: Die Ergebnisse sind interessant. Einige Studien zeigen positive Effekte, andere nicht. Die Kontrollgruppen waren klein.
-> Nachher (ohne Haltung des Autors): Die Studienlage ist gemischt, und die Kontrollgruppen waren klein. [Deine Einschätzung?]
+> Nachher (ohne Haltung des Autors): Die Studienlage ist gemischt und die Kontrollgruppen waren klein. [Deine Einschätzung?]
 
 **F2. Unsicherheits-Vermeidung.** Keine Ambivalenz, keine offenen Fragen. Im Text angelegte Ambivalenz sichtbar machen, keine hinzudichten.
 > Vorher: Die Technologie ist beeindruckend und vielversprechend. Getestet haben wir sie zwei Wochen lang.
@@ -286,7 +292,7 @@ Mit Schreibprobe: Satzlängen, Wortwahl, Einstiege und Satzzeichen notieren und 
 
 ## PERSÖNLICHKEIT UND SEELE
 
-Musterfreier, aber stimmloser Text (gleich lange Sätze, keine Meinung, Ton einer Pressemitteilung) ist ebenso verdächtig. Abhilfe: auf Fakten reagieren, Rhythmus mischen, Ambivalenz zulassen. **Grenze:** Meinung, Erlebnisse und Gefühle kommen vom Nutzer (Grundregel 1). Fehlen sie, markiert der Entwurf die Stelle: „[Deine Haltung dazu?]“. Ein erfundenes Erlebnis unter dem Namen des Nutzers ist schlimmer als jeder KI-Tell.
+Musterfreier, aber stimmloser Text im Ton einer Pressemitteilung ist ebenso verdächtig: auf Fakten reagieren, Rhythmus mischen, Ambivalenz zulassen. **Grenze:** Meinung, Erlebnisse und Gefühle kommen vom Nutzer (Grundregel 1). Fehlen sie, markiert der Entwurf die Stelle: „[Deine Haltung dazu?]“. Ein erfundenes Erlebnis unter dem Namen des Nutzers ist schlimmer als jeder KI-Tell.
 
 ## BEISPIEL
 
@@ -330,9 +336,10 @@ python3 scripts/analyse.py --json text.md                   # für Agenten
 python3 scripts/analyse.py --diff alt.md neu.md             # Fakten-Abgleich
 python3 scripts/analyse.py --strict text.md                 # Exit 1 bei „auffällig“
 python3 scripts/analyse.py --ohne-gedankenstriche text.md   # Hausregel, Exit 1 bei jedem Gedankenstrich
+python3 scripts/analyse.py --ohne-komma-vor-und text.md     # Hausregel, Exit 1 bei Kann-Kommas
 ```
 
-Schwache Signale schlagen bei etwa 5 Prozent menschlicher Texte an (10kGNAD); gegen KI-Texte ist noch nicht kalibriert. Das Skript ist eine Hilfe, kein Urteil; nur die Hausregel-Prüfung ist bindend.
+Schwache Signale schlagen bei etwa 5 Prozent menschlicher Texte an (10kGNAD). Das Skript ist eine Hilfe, kein Urteil; nur die Hausregel-Prüfungen sind bindend.
 
 ## ATTRIBUTION
 

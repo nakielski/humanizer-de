@@ -7,6 +7,9 @@
   Musterstufen, G1 und G2. Ausgearbeitet für „keine Gedankenstriche“ (auch „ - “ als Ersatz,
   auch in Titeln, Folien, Notizen); Grundregel 4 lautet jetzt „Hausstil vor Ausgangstext“.
 - Ablauf: neuer Pflichtschritt „Hausregeln prüfen“ mit Skript oder `grep`, auch im Modus Eingebettet.
+- Zweite Hausregel „kein Komma vor und/oder“: Kann-Kommas zwischen Hauptsätzen und vor dem letzten
+  Glied einer Aufzählung entfallen; Pflichtkommas, die einen Nebensatz, Relativsatz, Einschub oder
+  eine Infinitivgruppe schließen, bleiben. Eigene Kann-Kommas im Skill entfernt.
 - Beschreibung: lädt auch, wenn für den Nutzer deutscher Text entsteht (Mail, Post, Präsentation, Doku).
 - Gekürzt von 42.456 auf unter 30.000 Zeichen; alle 48 Muster und Beispiele bleiben.
   Einzelnachweise ins README verschoben.
@@ -18,6 +21,9 @@
 - `--ohne-gedankenstriche`: meldet jede Stelle mit Zeile und Spalte, Exit-Code 1 bei mindestens
   einem Treffer, unabhängig von `--strict`. Ausgenommen: Bis- und Streckenstriche, Bindestriche in
   Wörtern, Listenmarken (auch in Zitatblöcken), Tabellentrenner, Code.
+- `--ohne-komma-vor-und`: meldet jedes Komma vor „und“, „oder“, „bzw.“, „sowie“ und ordnet es
+  heuristisch als Kann-Komma (entfernen) oder Pflichtkomma (bleibt, gegenlesen) ein; Exit-Code 1
+  nur bei Kann-Kommas.
 
 ## 0.3.0
 

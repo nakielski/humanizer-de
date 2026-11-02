@@ -291,3 +291,36 @@ def test_hausregel_setzt_exit_code_unabhaengig_von_der_einschaetzung():
     assert code == 0
     code, _, _ = lauf("-", text="Ein ruhiger Text – nur ein Strich.")
     assert code == 0
+
+
+# --- Hausregel: kein Komma vor „und“/„oder“ (--ohne-komma-vor-und) -----------
+
+def _kommas(text):
+    return [k["art"] for k in analysiere(text, "--ohne-komma-vor-und")["hausregel_komma_vor_und"]]
+
+
+@pytest.mark.parametrize("text", [
+    "Die Studienlage ist gemischt, und die Kontrollgruppen waren klein.",   # zwei Hauptsätze
+    "Äpfel, Birnen, und Kirschen liegen bereit.",                           # Aufzählung
+    "Du kannst bleiben, oder du gehst.",
+    "Nachdem alles lief, und weil es spät war, gingen wir.",                # gleichrangige Nebensätze
+])
+def test_kann_komma_wird_gemeldet(text):
+    assert _kommas(text) == ["kann"], text
+
+
+@pytest.mark.parametrize("text", [
+    "Er sagte, dass er kommt, und ging.",                                   # Nebensatz endet
+    "Das Tool, das wir nutzen, und die Pipeline laufen stabil.",            # Relativsatz endet
+    "Wir haben versucht, das Problem zu lösen, und sind gescheitert.",      # Infinitivgruppe endet
+    "Nur eingreifen, wenn der Akteur wichtig ist, und keine Anrede einführen.",
+    "Er kam um zu helfen, und blieb.",
+])
+def test_pflichtkomma_bleibt(text):
+    assert _kommas(text) == ["pflicht"], text
+
+
+def test_komma_regel_exit_code():
+    assert lauf("--ohne-komma-vor-und", "-", text="Es regnet, und wir bleiben.")[0] == 1
+    assert lauf("--ohne-komma-vor-und", "-", text="Er sagte, dass er kommt, und ging.")[0] == 0
+    assert lauf("--ohne-komma-vor-und", "-", text="Es regnet und wir bleiben.")[0] == 0

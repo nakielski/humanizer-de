@@ -24,6 +24,7 @@ python3 scripts/analyse.py text.md                 # Bericht
 cat brief.md | python3 scripts/analyse.py --json   # JSON für Agenten
 python3 scripts/analyse.py --diff alt.md neu.md    # Was ist neu, was fehlt?
 python3 scripts/analyse.py --ohne-gedankenstriche text.md   # Hausregel: Exit 1 bei jedem Gedankenstrich
+python3 scripts/analyse.py --ohne-komma-vor-und text.md     # Hausregel: Exit 1 bei Kann-Kommas vor und/oder
 ```
 
 Ausgabe für das Vorher-Beispiel aus der SKILL.md (gekürzt):
@@ -83,6 +84,11 @@ Feste Vorgaben des Nutzers (z. B. „keine Gedankenstriche“) gelten im Skill o
 unabhängig von der Einschätzung. Für diese Regel prüft `--ohne-gedankenstriche` jede Zeile:
 Halbgeviertstrich mit Leerzeichen, Geviertstrich und „ - “ als Ersatz. Bis- und Streckenstriche
 („12–14“, „Köln–Bonn“), Bindestriche in Wörtern, Listenmarken und Code bleiben unberührt.
+
+`--ohne-komma-vor-und` unterscheidet Kann-Kommas (zwischen Hauptsätzen, vor dem letzten
+Aufzählungsglied) von Pflichtkommas, die einen Nebensatz, Relativsatz oder eine Infinitivgruppe
+schließen („Er sagte, dass er kommt, und ging“). Die Einordnung ist eine Heuristik über das Stück
+zwischen dem vorigen Komma und dem „und“; gemeldete Pflichtkommas kurz gegenlesen.
 
 Damit eine Hausregel auch greift, wenn ein Agent den Skill gerade nicht lädt, gehört sie
 zusätzlich in seine dauerhafte Konfiguration (bei Hermes in die `SOUL.md` der Profile).

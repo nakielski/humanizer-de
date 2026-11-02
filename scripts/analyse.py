@@ -2,7 +2,7 @@
 """Muster- und Stilscanner für deutsche Texte (humanizer-de).
 
 Aufruf:
-    python3 analyse.py [--json] [--strict] [--ohne-gedankenstriche] [DATEI | -]
+    python3 analyse.py [--json] [--strict] [--ohne-gedankenstriche] [--ohne-komma-vor-und] [DATEI | -]
     python3 analyse.py --diff ORIGINAL NEU [--json] [--strict]
     python3 analyse.py --muster
 
@@ -596,6 +596,54 @@ def gedankenstrich_stellen(text):
     return stellen
 
 
+# --------------------------------------------------------------------------
+# Hausregel: kein Komma vor „und“/„oder“, außer es ist Pflicht
+# --------------------------------------------------------------------------
+
+KOMMA_UND_RE = re.compile(r",\s+(und|oder|bzw\.|sowie)\b")
+UNTERORDNER = (
+    "dass|weil|wenn|ob|als|da|obwohl|obgleich|damit|nachdem|während|sodass|bevor|seit|seitdem|"
+    "falls|sobald|solange|sofern|indem|wie|wo|wohin|woher|warum|weshalb|wieso|wer|was|ehe|bis"
+)
+NEBENSATZ_ANFANG_RE = re.compile(
+    r"^(?:(?:ohne|statt|anstatt|außer|so)\s+dass\b|(?:" + UNTERORDNER + r")\b"
+    r"|(?:\w+\s+)?(?:der|die|das|dem|den|deren|dessen|denen|welche[rsmn]?)\b(?=\s+\S+.*\s\S+$)"
+    r"|(?:um|ohne|statt|anstatt)\s.*\bzu\s+\w+$)", re.I)
+INFINITIV_ENDE_RE = re.compile(r"\bzu\s+\w+$|\w+zu\w+en$", re.I)
+
+
+def komma_vor_und_stellen(text):
+    """Kommas vor „und“/„oder“ mit Einschätzung: Kann-Komma (entfernen) oder Pflichtkomma.
+
+    Pflicht ist das Komma, wenn es einen Nebensatz, eine Infinitivgruppe oder einen Einschub
+    schließt, der nach einem Komma begonnen hat („Er sagte, dass er kommt, und ging.“).
+    Heuristik: Das Stück zwischen dem vorigen Komma und diesem wird geprüft.
+    """
+    stellen, im_code = [], False
+    for nr, zeile in enumerate(text.splitlines(), 1):
+        if zeile.lstrip().startswith(("```", "~~~")):
+            im_code = not im_code
+            continue
+        if im_code:
+            continue
+        rumpf = re.sub(r"`[^`]*`", lambda m: " " * len(m.group(0)), zeile)
+        for m in KOMMA_UND_RE.finditer(rumpf):
+            davor = rumpf[:m.start()]
+            satz = re.split(r"[.!?:;]\s", davor)[-1]
+            teile = satz.split(",")
+            stueck = teile[-1].strip() if len(teile) > 1 else ""
+            if stueck:
+                pflicht = (NEBENSATZ_ANFANG_RE.search(stueck) is not None
+                           or INFINITIV_ENDE_RE.search(stueck) is not None)
+            else:   # kein Komma davor: nur eine Infinitivgruppe mit um/ohne/statt kann enden
+                pflicht = re.search(r"\b(?:um|ohne|statt|anstatt)\b.*\bzu\s+\w+$", satz.strip(), re.I) is not None
+            a, b = max(0, m.start() - 40), min(len(zeile), m.end() + 25)
+            stellen.append({"zeile": nr, "spalte": m.start() + 1, "wort": m.group(1),
+                            "art": "pflicht" if pflicht else "kann",
+                            "kontext": zeile[a:b].strip()})
+    return stellen
+
+
 def analysiere(text, wortliste=None):
     wortliste = wortliste or lade_wortliste()
     muster = wortliste["muster"]
@@ -760,6 +808,8 @@ def main(argv=None):
     parser.add_argument("--muster", action="store_true", help="Musterliste mit Stufen als JSON ausgeben")
     parser.add_argument("--ohne-gedankenstriche", action="store_true",
                         help="Hausregel: jeden Gedankenstrich melden (auch „ - “ als Ersatz); Exit-Code 1, wenn einer gefunden wird")
+    parser.add_argument("--ohne-komma-vor-und", action="store_true",
+                        help="Hausregel: Kann-Kommas vor „und“/„oder“ melden, Pflichtkommas nur anzeigen; Exit-Code 1 bei Kann-Kommas")
     parser.add_argument("--version", action="version", version=__version__)
     args = parser.parse_args(argv)
 
@@ -780,6 +830,9 @@ def main(argv=None):
     stellen = gedankenstrich_stellen(text) if args.ohne_gedankenstriche else []
     if args.ohne_gedankenstriche:
         bericht["hausregel_gedankenstriche"] = stellen
+    kommas = komma_vor_und_stellen(text) if args.ohne_komma_vor_und else []
+    if args.ohne_komma_vor_und:
+        bericht["hausregel_komma_vor_und"] = kommas
     if args.json:
         print(json.dumps(bericht, ensure_ascii=False, indent=2))
     else:
@@ -788,7 +841,13 @@ def main(argv=None):
             print(f"\nHausregel „keine Gedankenstriche“: {len(stellen) or 'keine'} Stelle(n)")
             for st in stellen:
                 print(f"  Zeile {st['zeile']}, Spalte {st['spalte']}: „{st['kontext']}“")
-    if stellen:
+        if args.ohne_komma_vor_und:
+            kann = [k for k in kommas if k["art"] == "kann"]
+            print(f"\nHausregel „kein Komma vor und/oder“: {len(kann) or 'keine'} Kann-Komma(s) entfernen")
+            for k in kommas:
+                art = "entfernen" if k["art"] == "kann" else "Pflichtkomma, bleibt (prüfen)"
+                print(f"  Zeile {k['zeile']}, Spalte {k['spalte']}, {art}: „{k['kontext']}“")
+    if stellen or any(k["art"] == "kann" for k in kommas):
         return 1
     return 1 if args.strict and bericht["einschaetzung"]["stufe"] == "auffällig" else 0
 
