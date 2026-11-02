@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.4.0
+
+### Skill (SKILL.md)
+- Hausregeln als eigener Abschnitt: feste Vorgaben des Nutzers gelten ohne Toleranz und vor
+  Musterstufen, G1 und G2. Ausgearbeitet für „keine Gedankenstriche“ (auch „ - “ als Ersatz,
+  auch in Titeln, Folien, Notizen); Grundregel 4 lautet jetzt „Hausstil vor Ausgangstext“.
+- Ablauf: neuer Pflichtschritt „Hausregeln prüfen“ mit Skript oder `grep`, auch im Modus Eingebettet.
+- Beschreibung: lädt auch, wenn für den Nutzer deutscher Text entsteht (Mail, Post, Präsentation, Doku).
+- Gekürzt von 42.456 auf unter 30.000 Zeichen; alle 48 Muster und Beispiele bleiben.
+  Einzelnachweise ins README verschoben.
+- Fachlich: D1 als Erfahrungswert gekennzeichnet (keine Studie belegt die Richtung);
+  B5/B6: „in der aktuellen Fassung von blader/humanizer nicht mehr enthalten“ statt der nicht
+  belegten Versionsangabe; »…« und «…» ausdrücklich als korrekt genannt.
+
+### Skript
+- `--ohne-gedankenstriche`: meldet jede Stelle mit Zeile und Spalte, Exit-Code 1 bei mindestens
+  einem Treffer, unabhängig von `--strict`. Ausgenommen: Bis- und Streckenstriche, Bindestriche in
+  Wörtern, Listenmarken (auch in Zitatblöcken), Tabellentrenner, Code.
+
 ## 0.3.0
 
 ### Skill (SKILL.md)

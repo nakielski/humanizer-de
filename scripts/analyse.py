@@ -2,7 +2,7 @@
 """Muster- und Stilscanner für deutsche Texte (humanizer-de).
 
 Aufruf:
-    python3 analyse.py [--json] [--strict] [DATEI | -]
+    python3 analyse.py [--json] [--strict] [--ohne-gedankenstriche] [DATEI | -]
     python3 analyse.py --diff ORIGINAL NEU [--json] [--strict]
     python3 analyse.py --muster
 
@@ -33,7 +33,7 @@ import sys
 from collections import OrderedDict
 from pathlib import Path
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 WORTLISTE = Path(__file__).resolve().parent.parent / "references" / "wordlist.json"
 
@@ -562,6 +562,40 @@ def einschaetzung(funde, woerter_gesamt):
     }
 
 
+# --------------------------------------------------------------------------
+# Hausregel: keine Gedankenstriche (null Toleranz, unabhängig von G1)
+# --------------------------------------------------------------------------
+
+LISTENMARKE_RE = re.compile(r"^[ \t]*(?:>[ \t]*)*(?:[-*+]|\d{1,3}[.)])[ \t]+")
+STRICH_RE = re.compile(
+    r"—"                                  # Geviertstrich, mit oder ohne Leerzeichen
+    r"|(?<=\s)–|–(?=\s)"                 # Halbgeviertstrich mit Leerzeichen auf einer Seite
+    r"|(?<=\S)\s-\s(?=\S)"                # Bindestrich als Ersatz-Gedankenstrich („Wort - Wort“)
+)   # „Wort–Wort“ ohne Leerzeichen bleibt: nicht von Streckenstrichen (Köln–Bonn) zu unterscheiden
+
+
+def gedankenstrich_stellen(text):
+    """Jede Stelle, an der ein Gedankenstrich steht oder ersetzt wurde.
+
+    Ausgenommen: Codeblöcke, Inline-Code, Listenmarken am Zeilenanfang, Tabellentrenner,
+    Bis- und Streckenstriche zwischen Zahlen oder Namen ohne Leerzeichen (12–14, Köln–Bonn).
+    """
+    stellen, im_code = [], False
+    for nr, zeile in enumerate(text.splitlines(), 1):
+        if zeile.lstrip().startswith(("```", "~~~")):
+            im_code = not im_code
+            continue
+        if im_code or re.fullmatch(r"[\s|:\-]+", zeile or " "):
+            continue
+        rumpf = LISTENMARKE_RE.sub(lambda m: " " * len(m.group(0)), zeile)
+        rumpf = re.sub(r"`[^`]*`", lambda m: " " * len(m.group(0)), rumpf)
+        for m in STRICH_RE.finditer(rumpf):
+            a, b = max(0, m.start() - 30), min(len(zeile), m.end() + 30)
+            stellen.append({"zeile": nr, "spalte": m.start() + 1, "zeichen": m.group(0).strip() or m.group(0),
+                            "kontext": zeile[a:b].strip()})
+    return stellen
+
+
 def analysiere(text, wortliste=None):
     wortliste = wortliste or lade_wortliste()
     muster = wortliste["muster"]
@@ -724,6 +758,8 @@ def main(argv=None):
     parser.add_argument("--diff", nargs=2, metavar=("ORIGINAL", "NEU"),
                         help="Zahlen, Namen, Zitate und Links zwischen zwei Fassungen vergleichen")
     parser.add_argument("--muster", action="store_true", help="Musterliste mit Stufen als JSON ausgeben")
+    parser.add_argument("--ohne-gedankenstriche", action="store_true",
+                        help="Hausregel: jeden Gedankenstrich melden (auch „ - “ als Ersatz); Exit-Code 1, wenn einer gefunden wird")
     parser.add_argument("--version", action="version", version=__version__)
     args = parser.parse_args(argv)
 
@@ -739,11 +775,21 @@ def main(argv=None):
         print(json.dumps(d, ensure_ascii=False, indent=2)) if args.json else drucke_diff(d)
         return 1 if args.strict and d["neu"] else 0
 
-    bericht = analysiere(lies_text(args.datei), wortliste)
+    text = lies_text(args.datei)
+    bericht = analysiere(text, wortliste)
+    stellen = gedankenstrich_stellen(text) if args.ohne_gedankenstriche else []
+    if args.ohne_gedankenstriche:
+        bericht["hausregel_gedankenstriche"] = stellen
     if args.json:
         print(json.dumps(bericht, ensure_ascii=False, indent=2))
     else:
         drucke_bericht(bericht)
+        if args.ohne_gedankenstriche:
+            print(f"\nHausregel „keine Gedankenstriche“: {len(stellen) or 'keine'} Stelle(n)")
+            for st in stellen:
+                print(f"  Zeile {st['zeile']}, Spalte {st['spalte']}: „{st['kontext']}“")
+    if stellen:
+        return 1
     return 1 if args.strict and bericht["einschaetzung"]["stufe"] == "auffällig" else 0
 
 

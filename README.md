@@ -23,6 +23,7 @@ Basiert konzeptionell auf [blader/humanizer](https://github.com/blader/humanizer
 python3 scripts/analyse.py text.md                 # Bericht
 cat brief.md | python3 scripts/analyse.py --json   # JSON für Agenten
 python3 scripts/analyse.py --diff alt.md neu.md    # Was ist neu, was fehlt?
+python3 scripts/analyse.py --ohne-gedankenstriche text.md   # Hausregel: Exit 1 bei jedem Gedankenstrich
 ```
 
 Ausgabe für das Vorher-Beispiel aus der SKILL.md (gekürzt):
@@ -76,6 +77,16 @@ Die Agent-Skills-Spezifikation erlaubt dort nur `name`, `description`, `license`
 `compatibility`, `metadata` und `allowed-tools`. Für Claude und andere Agenten erzeugt
 `python3 scripts/export_portabel.py` eine konforme Kopie in `dist/humanizer-de/`.
 
+## Hausregeln
+
+Feste Vorgaben des Nutzers (z. B. „keine Gedankenstriche“) gelten im Skill ohne Toleranz und
+unabhängig von der Einschätzung. Für diese Regel prüft `--ohne-gedankenstriche` jede Zeile:
+Halbgeviertstrich mit Leerzeichen, Geviertstrich und „ - “ als Ersatz. Bis- und Streckenstriche
+(„12–14“, „Köln–Bonn“), Bindestriche in Wörtern, Listenmarken und Code bleiben unberührt.
+
+Damit eine Hausregel auch greift, wenn ein Agent den Skill gerade nicht lädt, gehört sie
+zusätzlich in seine dauerhafte Konfiguration (bei Hermes in die `SOUL.md` der Profile).
+
 ## Tests
 
 ```bash
@@ -86,8 +97,17 @@ python3 -m pytest tests
 
 - [Wikipedia: Anzeichen für KI-generierte Inhalte](https://de.wikipedia.org/wiki/Wikipedia:Anzeichen_f%C3%BCr_KI-generierte_Inhalte)
 - [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) (engl. Original)
-- Desaire et al. (2023), Cell Reports Physical Science: Stilmerkmale von ChatGPT-Fachtexten
-- Kobak et al. (2025), Science Advances: Stilwörter in über 15 Millionen PubMed-Abstracts
+- Desaire et al. (2023): *Distinguishing academic science writing from humans or ChatGPT with
+  over 99% accuracy using off-the-shelf machine learning tools.* Cell Reports Physical Science.
+  64 menschliche und 128 ChatGPT-Fachtexte (Science-Perspectives), 20 Merkmale, darunter
+  Satzlängenvariation und Absatzstruktur; ganze Dokumente nahezu fehlerfrei, Absätze zu 92 Prozent.
+  Die Studie nennt keine Richtung für Gedankenstriche; D1 ist Erfahrungswissen.
+- Kobak et al. (2025): *Delving into LLM-assisted writing in biomedical publications through
+  excess vocabulary.* Science Advances (doi:10.1126/sciadv.adt3813). Über 15 Millionen
+  PubMed-Abstracts 2010 bis 2024; mindestens 13,5 Prozent der Abstracts von 2024 mit LLM bearbeitet.
+- [blader/humanizer](https://github.com/blader/humanizer) (MIT, Siqi Chen): Nummerierung und
+  Grundidee. Die aktuelle Fassung führt Synonym-Karussell (B5) und falsche Spannen (B6) nicht mehr
+  und behandelt Gedankenstriche als schwaches Signal.
 - korrektur.de, contentconsultants.de, ki-im-marketing.at: deutschsprachige Praxisbeobachtungen
 
 ## Lizenz

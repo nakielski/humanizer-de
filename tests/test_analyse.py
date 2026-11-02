@@ -254,3 +254,40 @@ def test_diff_ignoriert_umformulierung_ohne_neue_fakten(tmp_path):
 def test_diff_normalisiert_tausenderpunkte(tmp_path):
     ergebnis = _diff("Benötigt würden 2.000 Wohnungen.", "Benötigt würden 2000 Wohnungen.", tmp_path)
     assert ergebnis["neu"] == [] and ergebnis["verloren"] == []
+
+
+# --- Hausregel: keine Gedankenstriche (--ohne-gedankenstriche) ---------------
+
+def _stellen(text):
+    return analysiere(text, "--ohne-gedankenstriche")["hausregel_gedankenstriche"]
+
+
+@pytest.mark.parametrize("text", [
+    "Die Lösung – einmal installiert – läuft.",
+    "Agenten dürfen viel - aber gestuft.",
+    "Ein Satz—ein Einschub.",
+    "Am Ende steht ein Strich —",
+])
+def test_hausregel_findet_jeden_gedankenstrich(text):
+    assert _stellen(text), text
+
+
+@pytest.mark.parametrize("text", [
+    "Seite 12–14 und die Strecke Köln–Bonn.",
+    "Das KI-Modell läuft im Microsoft-Tenant.",
+    "- Listenpunkt\n- noch einer",
+    "> - Listenpunkt im Zitat",
+    "| a | b |\n|---|---|\n| 1 | 2 |",
+    "Im Code `a - b` und\n```\nx = 1 - 2\n```",
+])
+def test_hausregel_laesst_bis_striche_listen_und_code_in_ruhe(text):
+    assert _stellen(text) == [], text
+
+
+def test_hausregel_setzt_exit_code_unabhaengig_von_der_einschaetzung():
+    code, _, _ = lauf("--ohne-gedankenstriche", "-", text="Ein ruhiger Text – nur ein Strich.")
+    assert code == 1
+    code, _, _ = lauf("--ohne-gedankenstriche", "-", text="Ein ruhiger Text ohne Strich.")
+    assert code == 0
+    code, _, _ = lauf("-", text="Ein ruhiger Text – nur ein Strich.")
+    assert code == 0
